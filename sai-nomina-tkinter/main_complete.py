@@ -788,8 +788,8 @@ class SAICompleteApp:
 
     def show_egresos_module(self):
         """Mostrar modulo de egresos e ingresos"""
-        from gui.modules.egresos_complete import EgresosCompleteModule
-        module = EgresosCompleteModule(self.content_area, self)
+        from gui.modules.egresos_ingresos_complete import EgresosIngresosCompleteModule
+        module = EgresosIngresosCompleteModule(self.content_area, self)
         self.status_label.config(text="Modulo Egresos-Ingresos - Descuentos y bonificaciones")
 
     def show_dotacion_module(self):
