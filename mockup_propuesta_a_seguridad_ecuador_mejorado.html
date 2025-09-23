@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecuriNómina Pro - Sistema Integral RRHH Empresas de Seguridad Ecuador</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .dashboard {
+            background: white;
+            margin: 10px;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .logo .icon {
+            margin-right: 8px;
+            color: #e74c3c;
+        }
+
+        .ecuador-flag {
+            width: 28px;
+            height: 18px;
+            background: linear-gradient(to bottom, #ffce00 33%, #0072ce 33% 66%, #ce1126 66%);
+            border-radius: 3px;
+            margin-left: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .header-center {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-box {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: white;
+            width: 220px;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 14px;
+        }
+
+        .nav-tabs {
+            background: #34495e;
+            display: flex;
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 12px 18px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            border-right: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+            white-space: nowrap;
+            font-size: 13px;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .content {
+            padding: 15px;
+            background: #f8f9fa;
+        }
+
+        .urgent-alerts {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .alert-icon {
+            font-size: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .kpi-section {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid #e74c3c;
+        }
+
+        .kpi-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 6px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .kpi-item {
+            text-align: center;
+            padding: 12px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-value {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .kpi-label {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+
+        .compliance-panel {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid #27ae60;
+        }
+
+        .compliance-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 6px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 3px solid #27ae60;
+            font-size: 13px;
+        }
+
+        .status-ok { color: #27ae60; }
+        .status-warning { color: #f39c12; }
+        .status-critical { color: #e74c3c; }
+
+        .massive-operations {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .operation-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid #9b59b6;
+        }
+
+        .operation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .operation-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .operation-status {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-processing { background: #e3f2fd; color: #1976d2; }
+        .status-ready { background: #e8f5e8; color: #4caf50; }
+        .status-pending { background: #fff3e0; color: #ff9800; }
+
+        .operation-detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 6px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .detail-number {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #ecf0f1;
+            border-radius: 3px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            transition: width 0.3s;
+        }
+
+        .cost-analysis {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .client-list {
+            list-style: none;
+            padding: 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .client-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 6px;
+            background: #ecf0f1;
+            border-radius: 6px;
+            border-left: 3px solid #3498db;
+            font-size: 13px;
+        }
+
+        .profitability {
+            font-weight: bold;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .profitable { background: #d5f4e6; color: #27ae60; }
+        .marginal { background: #fef9e7; color: #f39c12; }
+        .loss { background: #fadbd8; color: #e74c3c; }
+
+        .operational-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .operational-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .shift-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 5px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .shift-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .covered { background: #27ae60; }
+        .uncovered { background: #e74c3c; }
+        .overtime { background: #f39c12; }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 10px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .action-icon {
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        .massive-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .massive-btn:hover {
+            box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .legal-compliance {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .compliance-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .compliance-metric {
+            text-align: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 2px solid #ecf0f1;
+        }
+
+        .metric-number {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        .metric-desc {
+            font-size: 11px;
+            color: #7f8c8d;
+        }
+
+        .real-time-monitor {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid #f39c12;
+            margin-bottom: 15px;
+        }
+
+        .monitor-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .monitor-item {
+            text-align: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .monitor-value {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .risk-level {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .risk-low { background: #d5f4e6; color: #27ae60; }
+        .risk-medium { background: #fef9e7; color: #f39c12; }
+        .risk-high { background: #fadbd8; color: #e74c3c; }
+
+        @media (max-width: 1400px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .operational-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .massive-operations {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                margin: 5px;
+            }
+
+            .content {
+                padding: 10px;
+            }
+
+            .operational-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .massive-operations {
+                grid-template-columns: 1fr;
+            }
+
+            .legal-compliance {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .header-center {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <span class="icon">🛡️</span>
+                SecuriNómina Pro - Sistema Integral RRHH
+                <div class="ecuador-flag"></div>
+            </div>
+            <div class="header-center">
+                <input type="text" class="search-box" placeholder="🔍 Buscar empleado, cliente, proceso...">
+            </div>
+            <div class="header-right">
+                <span>🔔 (8)</span>
+                <span>👤 Dir. General</span>
+                <span>📅 15-Ene-2025</span>
+                <span>⚙️</span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <a href="#" class="nav-tab active">📊 Dashboard</a>
+            <a href="#" class="nav-tab">👥 Guardias (1,247)</a>
+            <a href="#" class="nav-tab">💰 Nómina</a>
+            <a href="#" class="nav-tab">🏢 Clientes (45)</a>
+            <a href="#" class="nav-tab">⏰ Turnos</a>
+            <a href="#" class="nav-tab">🎯 Dotaciones</a>
+            <a href="#" class="nav-tab">📈 Reportes</a>
+            <a href="#" class="nav-tab">⚖️ Cumplimiento</a>
+            <a href="#" class="nav-tab">📋 Cargas Masivas</a>
+            <a href="#" class="nav-tab">🔧 Config</a>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Alertas Urgentes -->
+            <div class="urgent-alerts">
+                <span class="alert-icon">⚠️</span>
+                <div>
+                    <strong>Alertas Críticas:</strong> Proceso de nómina quincenal iniciado (234 guardias) |
+                    3 certificaciones vencen hoy | 2 puestos descubiertos turno nocturno |
+                    Carga masiva de vacaciones pendiente | SUT: 12 finiquitos por procesar
+                </div>
+                <span style="margin-left: auto;">🕐 Actualizado: hace 2 min</span>
+            </div>
+
+            <!-- KPIs y Compliance -->
+            <div class="main-grid">
+                <div class="kpi-section">
+                    <div class="kpi-title">📈 KPIs Operativos Tiempo Real - Seguridad Ecuador</div>
+                    <div class="kpi-grid">
+                        <div class="kpi-item">
+                            <div class="kpi-value">1,247</div>
+                            <div class="kpi-label">🛡️ Guardias Activos</div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-value">$2,847,230</div>
+                            <div class="kpi-label">💵 Nómina Enero</div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-value">8.2%</div>
+                            <div class="kpi-label">📊 Rotación Mensual</div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-value">2,156h</div>
+                            <div class="kpi-label">⏱️ Horas Extra</div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-value">96.8%</div>
+                            <div class="kpi-label">✅ Cobertura</div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-value">$456,890</div>
+                            <div class="kpi-label">💰 Ahorro Mes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="compliance-panel">
+                    <div class="kpi-title">⚖️ Cumplimiento Legal Ecuador</div>
+                    <div class="compliance-item">
+                        <span>📋 IESS al día</span>
+                        <span class="status-ok">✅ 100%</span>
+                    </div>
+                    <div class="compliance-item">
+                        <span>🏛️ SUT actualizado</span>
+                        <span class="status-warning">⚠️ 12 pendientes</span>
+                    </div>
+                    <div class="compliance-item">
+                        <span>💰 Décimos provisión</span>
+                        <span class="status-ok">✅ $284,567</span>
+                    </div>
+                    <div class="compliance-item">
+                        <span>📊 Form. 107 listo</span>
+                        <span class="status-ok">✅ Generado</span>
+                    </div>
+                    <div class="compliance-item">
+                        <span>🎓 Certificaciones</span>
+                        <span class="status-critical">❌ 15 vencidas</span>
+                    </div>
+                    <div class="compliance-item">
+                        <span>🔫 Licencias armas</span>
+                        <span class="status-warning">⚠️ 8 por vencer</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operaciones Masivas -->
+            <div class="massive-operations">
+                <div class="operation-card">
+                    <div class="operation-header">
+                        <div class="operation-title">📋 Cargas Masivas en Proceso</div>
+                        <span class="operation-status status-processing">PROCESANDO</span>
+                    </div>
+                    <div class="operation-detail">
+                        <span>📊 Nómina Quincenal</span>
+                        <span class="detail-number">234/1,247</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 18.7%;"></div>
+                    </div>
+                    <div class="operation-detail">
+                        <span>🏖️ Solicitudes Vacaciones</span>
+                        <span class="detail-number">67 pendientes</span>
+                    </div>
+                    <div class="operation-detail">
+                        <span>👤 Nuevos Ingresos</span>
+                        <span class="detail-number">23 esta semana</span>
+                    </div>
+                    <div class="operation-detail">
+                        <span>📋 Finiquitos SUT</span>
+                        <span class="detail-number">12 por procesar</span>
+                    </div>
+                </div>
+
+                <div class="operation-card">
+                    <div class="operation-header">
+                        <div class="operation-title">🔧 Correcciones Masivas</div>
+                        <span class="operation-status status-ready">LISTO</span>
+                    </div>
+                    <div class="operation-detail">
+                        <span>💰 Ajustes Salariales</span>
+                        <span class="detail-number">156 guardias</span>
+                    </div>
+                    <div class="operation-detail">
+                        <span>🏦 Cambios Cuentas Bancarias</span>
+                        <span class="detail-number">34 actualizaciones</span>
+                    </div>
+                    <div class="operation-detail">
+                        <span>📊 Corrección Horas Extra</span>
+                        <span class="detail-number">89 registros</span>
+                    </div>
+                    <div class="operation-detail">
+                        <span>🎯 Reasignación Centros Costo</span>
+                        <span class="detail-number">45 cambios</span>
+                    </div>
+                </div>
+
+                <div class="operation-card">
+                    <div class="operation-header">
+                        <div class="operation-title">📅 Liquidaciones Masivas</div>
+                        <span class="operation-status status-pending">PENDIENTE</span>
+                    </div>
+                    <div class="operation-detail">
+                        <span>🏃 Renuncias Voluntarias</span>
+                        <span class="detail-number">7 este mes</span>
+                    </div>
+                    <div class="operation-detail">
+                        <span>📜 Fin Contratos Temporales</span>
+                        <span class="detail-number">15 contratos</span>
+                    </div>
+                    <div class="operation-detail">
+                        <span>⚖️ Despidos Disciplinarios</span>
+                        <span class="detail-number">3 casos</span>
+                    </div>
+                    <div class="operation-detail">
+                        <span>💰 Cálculo Liquidaciones</span>
+                        <span class="detail-number">$145,678</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitor Tiempo Real -->
+            <div class="real-time-monitor">
+                <div class="kpi-title">⚡ Monitor Operacional Tiempo Real</div>
+                <div class="monitor-grid">
+                    <div class="monitor-item">
+                        <div class="monitor-value" style="color: #27ae60;">1,203</div>
+                        <div>👮 Guardias en Puesto</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="monitor-value" style="color: #e74c3c;">44</div>
+                        <div>❌ Puestos Descubiertos</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="monitor-value" style="color: #f39c12;">127</div>
+                        <div>⏰ Horas Extra Hoy</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="monitor-value" style="color: #3498db;">$15,678</div>
+                        <div>💰 Costo Extra Hoy</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Análisis por Cliente -->
+            <div class="cost-analysis">
+                <div class="chart-container">
+                    <div class="kpi-title">🏢 Rentabilidad por Cliente/Contrato</div>
+                    <ul class="client-list">
+                        <li class="client-item">
+                            <span>🏢 Banco del Pacífico - Torre Principal</span>
+                            <span class="profitability profitable">+22.3%</span>
+                        </li>
+                        <li class="client-item">
+                            <span>🏬 Mall del Sol - Centro Comercial</span>
+                            <span class="profitability profitable">+18.7%</span>
+                        </li>
+                        <li class="client-item">
+                            <span>🏭 Petroquímica - Refinería Norte</span>
+                            <span class="profitability marginal">+5.2%</span>
+                        </li>
+                        <li class="client-item">
+                            <span>🏫 Universidad Central - Campus</span>
+                            <span class="profitability profitable">+14.8%</span>
+                        </li>
+                        <li class="client-item">
+                            <span>🏥 Hospital Metropolitano</span>
+                            <span class="profitability loss">-1.8%</span>
+                        </li>
+                        <li class="client-item">
+                            <span>🏪 Centros Comerciales El Jardín</span>
+                            <span class="profitability profitable">+16.4%</span>
+                        </li>
+                        <li class="client-item">
+                            <span>🏭 Cervecería Nacional - Planta</span>
+                            <span class="profitability marginal">+7.9%</span>
+                        </li>
+                        <li class="client-item">
+                            <span>🏢 Torre Millennium Plaza</span>
+                            <span class="profitability profitable">+11.2%</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="chart-container">
+                    <div class="kpi-title">📊 Distribución Costos Nómina Real</div>
+                    <div style="padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                        <div style="margin-bottom: 12px;">
+                            <strong>💰 Sueldos Base:</strong> $1,847,400 (64.9%)
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong>⏰ Horas Suplementarias:</strong> $456,890 (16.0%)
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong>⏱️ Horas Extraordinarias:</strong> $234,567 (8.2%)
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong>🌙 Recargos Nocturnos:</strong> $156,234 (5.5%)
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong>📋 Aportes IESS:</strong> $152,139 (5.3%)
+                        </div>
+                        <div style="color: #e74c3c;">
+                            <strong>📈 Total Mes:</strong> $2,847,230
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Operativa Detallada -->
+            <div class="operational-grid">
+                <div class="operational-card">
+                    <div class="kpi-title">⏰ Turnos Tiempo Real</div>
+                    <div class="shift-item">
+                        <div style="display: flex; align-items: center;">
+                            <div class="shift-status covered"></div>
+                            <span>06:00-18:00</span>
+                        </div>
+                        <span>578/592</span>
+                    </div>
+                    <div class="shift-item">
+                        <div style="display: flex; align-items: center;">
+                            <div class="shift-status uncovered"></div>
+                            <span>18:00-06:00</span>
+                        </div>
+                        <span>625/655</span>
+                    </div>
+                    <div class="shift-item">
+                        <div style="display: flex; align-items: center;">
+                            <div class="shift-status overtime"></div>
+                            <span>Dobles Turnos</span>
+                        </div>
+                        <span>34 guardias</span>
+                    </div>
+                    <div class="shift-item">
+                        <div style="display: flex; align-items: center;">
+                            <div class="shift-status covered"></div>
+                            <span>Supervisores</span>
+                        </div>
+                        <span>67/67</span>
+                    </div>
+                </div>
+
+                <div class="operational-card">
+                    <div class="kpi-title">🎯 Control Dotaciones</div>
+                    <div class="shift-item">
+                        <span>🔫 Armas asignadas</span>
+                        <span>1,203/1,247</span>
+                    </div>
+                    <div class="shift-item">
+                        <span>📻 Radios operativos</span>
+                        <span>1,234/1,247</span>
+                    </div>
+                    <div class="shift-item">
+                        <span>👕 Uniformes entregados</span>
+                        <span style="color: #27ae60;">1,180/1,247</span>
+                    </div>
+                    <div class="shift-item">
+                        <span>🚗 Vehículos supervisión</span>
+                        <span>38/42</span>
+                    </div>
+                    <div class="shift-item">
+                        <span>🦺 Chalecos antibalas</span>
+                        <span>1,238/1,247</span>
+                    </div>
+                </div>
+
+                <div class="operational-card">
+                    <div class="kpi-title">📈 Métricas Rendimiento</div>
+                    <div class="shift-item">
+                        <span>⭐ Evaluación promedio</span>
+                        <span>8.4/10</span>
+                    </div>
+                    <div class="shift-item">
+                        <span>🚨 Incidentes reportados</span>
+                        <span style="color: #f39c12;">18 este mes</span>
+                    </div>
+                    <div class="shift-item">
+                        <span>📞 Quejas clientes</span>
+                        <span style="color: #27ae60;">5 (-44%)</span>
+                    </div>
+                    <div class="shift-item">
+                        <span>🎓 Capacitaciones</span>
+                        <span>289 completadas</span>
+                    </div>
+                    <div class="shift-item">
+                        <span>👏 Reconocimientos</span>
+                        <span style="color: #27ae60;">45 otorgados</span>
+                    </div>
+                </div>
+
+                <div class="operational-card">
+                    <div class="kpi-title">🚨 Alertas y Riesgos</div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Fatiga Personal:</strong>
+                        <span class="risk-level risk-medium">Medio</span>
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Cobertura Nocturna:</strong>
+                        <span class="risk-level risk-high">Alto</span>
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Certificaciones:</strong>
+                        <span class="risk-level risk-high">Alto</span>
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Cumplimiento Legal:</strong>
+                        <span class="risk-level risk-low">Bajo</span>
+                    </div>
+                    <div>
+                        <strong>Equipamiento:</strong>
+                        <span class="risk-level risk-medium">Medio</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones Rápidas Mejoradas -->
+            <div class="quick-actions">
+                <a href="#" class="action-btn massive-btn">
+                    <div class="action-icon">📋</div>
+                    <div>Cargas Masivas</div>
+                </a>
+                <a href="#" class="action-btn massive-btn">
+                    <div class="action-icon">🔧</div>
+                    <div>Correcciones Masivas</div>
+                </a>
+                <a href="#" class="action-btn massive-btn">
+                    <div class="action-icon">💰</div>
+                    <div>Liquidaciones Masivas</div>
+                </a>
+                <a href="#" class="action-btn massive-btn">
+                    <div class="action-icon">🏖️</div>
+                    <div>Vacaciones Masivas</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">💵</div>
+                    <div>Procesar Nómina</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">📊</div>
+                    <div>Reporte IESS</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">👤</div>
+                    <div>Nuevo Guardia</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">⏰</div>
+                    <div>Gestión Turnos</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">🎯</div>
+                    <div>Asignar Dotación</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">📋</div>
+                    <div>Finiquito SUT</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">🏢</div>
+                    <div>Análisis Cliente</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">📈</div>
+                    <div>Dashboard BI</div>
+                </a>
+            </div>
+
+            <!-- Cumplimiento Legal Detallado -->
+            <div class="legal-compliance">
+                <div class="compliance-card">
+                    <div class="kpi-title">📋 Indicadores IESS Ecuador</div>
+                    <div class="compliance-grid">
+                        <div class="compliance-metric">
+                            <div class="metric-number">98.7%</div>
+                            <div class="metric-desc">Precisión Planillas</div>
+                        </div>
+                        <div class="compliance-metric">
+                            <div class="metric-number">$317,568</div>
+                            <div class="metric-desc">Aporte Patronal</div>
+                        </div>
+                        <div class="compliance-metric">
+                            <div class="metric-number">1,247</div>
+                            <div class="metric-desc">Avisos Activos</div>
+                        </div>
+                        <div class="compliance-metric">
+                            <div class="metric-number">$127,890</div>
+                            <div class="metric-desc">Fondos Reserva</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="compliance-card">
+                    <div class="kpi-title">📊 Control SUT y Ministerio</div>
+                    <div class="compliance-grid">
+                        <div class="compliance-metric">
+                            <div class="metric-number">289</div>
+                            <div class="metric-desc">Contratos Registrados</div>
+                        </div>
+                        <div class="compliance-metric">
+                            <div class="metric-number">23</div>
+                            <div class="metric-desc">Finiquitos Pendientes</div>
+                        </div>
+                        <div class="compliance-metric">
+                            <div class="metric-number">15</div>
+                            <div class="metric-desc">Días Próx. Décimos</div>
+                        </div>
+                        <div class="compliance-metric">
+                            <div class="metric-number">$45,678</div>
+                            <div class="metric-desc">Utilidades Calculadas</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

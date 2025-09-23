@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecuriNómina Pro - Sistema Integral RRHH Completo Ecuador 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .dashboard {
+            background: white;
+            margin: 8px;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 10px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo .icon {
+            margin-right: 8px;
+            color: #e74c3c;
+        }
+
+        .ecuador-flag {
+            width: 26px;
+            height: 16px;
+            background: linear-gradient(to bottom, #ffce00 33%, #0072ce 33% 66%, #ce1126 66%);
+            border-radius: 3px;
+            margin-left: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .header-center {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-box {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: white;
+            width: 200px;
+            font-size: 13px;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 13px;
+        }
+
+        .nav-tabs {
+            background: #34495e;
+            display: flex;
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 10px 15px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            border-right: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+            white-space: nowrap;
+            font-size: 12px;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .content {
+            padding: 12px;
+            background: #f8f9fa;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .urgent-alerts {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+        }
+
+        .alert-icon {
+            font-size: 18px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .main-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .module-card {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 4px solid #3498db;
+            transition: all 0.3s;
+        }
+
+        .module-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        .module-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .module-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .module-status {
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .status-active { background: #e8f5e8; color: #4caf50; }
+        .status-processing { background: #e3f2fd; color: #1976d2; }
+        .status-warning { background: #fff3e0; color: #ff9800; }
+        .status-critical { background: #ffebee; color: #f44336; }
+
+        .module-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .metric-item {
+            text-align: center;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .metric-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 2px;
+        }
+
+        .metric-label {
+            color: #7f8c8d;
+        }
+
+        .module-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .mini-btn {
+            padding: 4px 8px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 10px;
+            transition: all 0.3s;
+        }
+
+        .mini-btn:hover {
+            background: #2980b9;
+        }
+
+        .massive-operations-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .operations-panel {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 4px solid #e74c3c;
+        }
+
+        .operation-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px;
+            margin-bottom: 4px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #ecf0f1;
+            border-radius: 2px;
+            margin: 4px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            transition: width 0.3s;
+        }
+
+        .talent-management {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .talent-card {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 4px solid #9b59b6;
+        }
+
+        .candidate-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px;
+            margin-bottom: 4px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .stage-badge {
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .stage-applied { background: #e3f2fd; color: #1976d2; }
+        .stage-interview { background: #fff3e0; color: #ff9800; }
+        .stage-approved { background: #e8f5e8; color: #4caf50; }
+        .stage-rejected { background: #ffebee; color: #f44336; }
+
+        .analytics-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .analytics-card {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 4px solid #f39c12;
+        }
+
+        .chart-placeholder {
+            height: 120px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .integration-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .integration-card {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 4px solid #27ae60;
+            text-align: center;
+        }
+
+        .integration-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin: 0 auto 6px;
+        }
+
+        .connected { background: #27ae60; }
+        .disconnected { background: #e74c3c; }
+        .syncing { background: #f39c12; animation: pulse 1s infinite; }
+
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 6px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .action-icon {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .massive-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .massive-btn:hover {
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+        }
+
+        .employee-portal-preview {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 4px solid #16a085;
+            margin-bottom: 12px;
+        }
+
+        .portal-feature {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px;
+            margin-bottom: 4px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .usage-stats {
+            font-weight: bold;
+            color: #16a085;
+        }
+
+        @media (max-width: 1400px) {
+            .main-dashboard {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .talent-management {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .integration-section {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                margin: 4px;
+            }
+
+            .content {
+                padding: 8px;
+            }
+
+            .main-dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .massive-operations-section {
+                grid-template-columns: 1fr;
+            }
+
+            .talent-management {
+                grid-template-columns: 1fr;
+            }
+
+            .analytics-section {
+                grid-template-columns: 1fr;
+            }
+
+            .integration-section {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .header-center {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <span class="icon">🛡️</span>
+                SecuriNómina Pro 2025 - Sistema Integral
+                <div class="ecuador-flag"></div>
+            </div>
+            <div class="header-center">
+                <input type="text" class="search-box" placeholder="🔍 Búsqueda global...">
+            </div>
+            <div class="header-right">
+                <span>🔔 (12)</span>
+                <span>👤 Director RRHH</span>
+                <span>📅 15-Ene-2025 10:45</span>
+                <span>⚙️</span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <a href="#" class="nav-tab active">📊 Dashboard</a>
+            <a href="#" class="nav-tab">👥 Guardias (1,247)</a>
+            <a href="#" class="nav-tab">💰 Nómina</a>
+            <a href="#" class="nav-tab">🏢 Clientes (45)</a>
+            <a href="#" class="nav-tab">⏰ Control Asistencia</a>
+            <a href="#" class="nav-tab">🎯 Dotaciones</a>
+            <a href="#" class="nav-tab">🎓 Reclutamiento</a>
+            <a href="#" class="nav-tab">📈 Evaluaciones</a>
+            <a href="#" class="nav-tab">🏖️ Beneficios</a>
+            <a href="#" class="nav-tab">📋 Cargas Masivas</a>
+            <a href="#" class="nav-tab">📊 BI & Analytics</a>
+            <a href="#" class="nav-tab">🔗 Integraciones</a>
+            <a href="#" class="nav-tab">📱 Portal Empleado</a>
+            <a href="#" class="nav-tab">⚖️ Cumplimiento</a>
+            <a href="#" class="nav-tab">🔧 Config</a>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Alertas Urgentes -->
+            <div class="urgent-alerts">
+                <span class="alert-icon">⚠️</span>
+                <div>
+                    <strong>Alertas Sistema:</strong> 234 guardias en proceso nómina quincenal |
+                    3 certificaciones vencen HOY | 67 solicitudes vacaciones pendientes |
+                    12 finiquitos SUT por procesar | 23 nuevos candidatos en entrevistas |
+                    Integración IESS: última sync hace 15min
+                </div>
+                <span style="margin-left: auto;">🕐 Tiempo real</span>
+            </div>
+
+            <!-- Módulos Principales del Sistema -->
+            <div class="main-dashboard">
+                <!-- Módulo Core HR y Nómina -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">💰 Core HR y Nómina</div>
+                        <span class="module-status status-processing">PROCESANDO</span>
+                    </div>
+                    <div class="module-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value">$2,847,230</div>
+                            <div class="metric-label">Nómina Enero</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">1,247</div>
+                            <div class="metric-label">Empleados</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">234/1,247</div>
+                            <div class="metric-label">En Proceso</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">98.7%</div>
+                            <div class="metric-label">Precisión</div>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 18.7%;"></div>
+                    </div>
+                    <div class="module-actions">
+                        <a href="#" class="mini-btn">Procesar</a>
+                        <a href="#" class="mini-btn">Reportes</a>
+                        <a href="#" class="mini-btn">Ajustes</a>
+                    </div>
+                </div>
+
+                <!-- Módulo Control de Asistencia -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">⏰ Control Asistencia & Turnos</div>
+                        <span class="module-status status-active">ACTIVO</span>
+                    </div>
+                    <div class="module-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value">1,203</div>
+                            <div class="metric-label">En Puesto</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">44</div>
+                            <div class="metric-label">Descubiertos</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">127h</div>
+                            <div class="metric-label">Extra Hoy</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">96.8%</div>
+                            <div class="metric-label">Cobertura</div>
+                        </div>
+                    </div>
+                    <div class="module-actions">
+                        <a href="#" class="mini-btn">Turnos</a>
+                        <a href="#" class="mini-btn">Biométrico</a>
+                        <a href="#" class="mini-btn">Reportes</a>
+                    </div>
+                </div>
+
+                <!-- Módulo Portal Empleado -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">📱 Portal Autoservicio Empleado</div>
+                        <span class="module-status status-active">24/7</span>
+                    </div>
+                    <div class="module-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value">1,156</div>
+                            <div class="metric-label">Usuarios Activos</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">2,456</div>
+                            <div class="metric-label">Solicitudes/Mes</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">87%</div>
+                            <div class="metric-label">Adopción</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">4.8/5</div>
+                            <div class="metric-label">Satisfacción</div>
+                        </div>
+                    </div>
+                    <div class="module-actions">
+                        <a href="#" class="mini-btn">Portal Web</a>
+                        <a href="#" class="mini-btn">App Móvil</a>
+                        <a href="#" class="mini-btn">Estadísticas</a>
+                    </div>
+                </div>
+
+                <!-- Módulo Reclutamiento -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">🎓 Reclutamiento & Selección</div>
+                        <span class="module-status status-warning">ACTIVO</span>
+                    </div>
+                    <div class="module-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value">23</div>
+                            <div class="metric-label">Candidatos</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">8</div>
+                            <div class="metric-label">Entrevistas</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">12</div>
+                            <div class="metric-label">Vacantes</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">15 días</div>
+                            <div class="metric-label">Tiempo Prom.</div>
+                        </div>
+                    </div>
+                    <div class="module-actions">
+                        <a href="#" class="mini-btn">Vacantes</a>
+                        <a href="#" class="mini-btn">Candidatos</a>
+                        <a href="#" class="mini-btn">Entrevistas</a>
+                    </div>
+                </div>
+
+                <!-- Módulo Evaluaciones -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">📈 Evaluaciones & Desarrollo</div>
+                        <span class="module-status status-processing">EN CURSO</span>
+                    </div>
+                    <div class="module-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value">289</div>
+                            <div class="metric-label">Completadas</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">67</div>
+                            <div class="metric-label">Pendientes</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">8.4/10</div>
+                            <div class="metric-label">Promedio</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">45</div>
+                            <div class="metric-label">Planes Desarrollo</div>
+                        </div>
+                    </div>
+                    <div class="module-actions">
+                        <a href="#" class="mini-btn">Evaluar</a>
+                        <a href="#" class="mini-btn">Planes</a>
+                        <a href="#" class="mini-btn">Reportes</a>
+                    </div>
+                </div>
+
+                <!-- Módulo Beneficios -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">🏥 Beneficios & Compensaciones</div>
+                        <span class="module-status status-active">ACTIVO</span>
+                    </div>
+                    <div class="module-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value">$456,890</div>
+                            <div class="metric-label">Seguros Mes</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">1,203</div>
+                            <div class="metric-label">Afiliados</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">234</div>
+                            <div class="metric-label">Solicitudes</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">97%</div>
+                            <div class="metric-label">Satisfacción</div>
+                        </div>
+                    </div>
+                    <div class="module-actions">
+                        <a href="#" class="mini-btn">Seguros</a>
+                        <a href="#" class="mini-btn">Bonos</a>
+                        <a href="#" class="mini-btn">Vales</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operaciones Masivas -->
+            <div class="massive-operations-section">
+                <div class="operations-panel">
+                    <div class="module-title">📋 Operaciones Masivas en Tiempo Real</div>
+                    <div class="operation-item">
+                        <span>💰 Nómina Quincenal</span>
+                        <span style="color: #e74c3c;">234/1,247 procesando</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 18.7%;"></div>
+                    </div>
+                    <div class="operation-item">
+                        <span>🏖️ Carga Vacaciones</span>
+                        <span style="color: #f39c12;">67 solicitudes</span>
+                    </div>
+                    <div class="operation-item">
+                        <span>🔧 Correcciones Salariales</span>
+                        <span style="color: #27ae60;">156 listo</span>
+                    </div>
+                    <div class="operation-item">
+                        <span>📋 Liquidaciones SUT</span>
+                        <span style="color: #e74c3c;">12 pendientes</span>
+                    </div>
+                    <div class="operation-item">
+                        <span>👤 Nuevos Ingresos</span>
+                        <span style="color: #3498db;">23 esta semana</span>
+                    </div>
+                </div>
+
+                <div class="operations-panel">
+                    <div class="module-title">⚖️ Cumplimiento Legal Ecuador</div>
+                    <div class="operation-item">
+                        <span>📊 IESS al día</span>
+                        <span style="color: #27ae60;">✅ 100%</span>
+                    </div>
+                    <div class="operation-item">
+                        <span>🏛️ SUT actualizado</span>
+                        <span style="color: #f39c12;">⚠️ 12 pendientes</span>
+                    </div>
+                    <div class="operation-item">
+                        <span>💰 Décimos provisión</span>
+                        <span style="color: #27ae60;">✅ $284,567</span>
+                    </div>
+                    <div class="operation-item">
+                        <span>📋 Form. 107</span>
+                        <span style="color: #27ae60;">✅ Generado</span>
+                    </div>
+                    <div class="operation-item">
+                        <span>🎓 Certificaciones</span>
+                        <span style="color: #e74c3c;">❌ 15 vencidas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gestión del Talento -->
+            <div class="talent-management">
+                <div class="talent-card">
+                    <div class="module-title">🎯 Pipeline Reclutamiento</div>
+                    <div class="candidate-item">
+                        <span>Carlos Mendoza - Guardia Senior</span>
+                        <span class="stage-badge stage-interview">ENTREVISTA</span>
+                    </div>
+                    <div class="candidate-item">
+                        <span>Ana García - Supervisora</span>
+                        <span class="stage-badge stage-approved">APROBADO</span>
+                    </div>
+                    <div class="candidate-item">
+                        <span>Luis Torres - Guardia</span>
+                        <span class="stage-badge stage-applied">APLICÓ</span>
+                    </div>
+                    <div class="candidate-item">
+                        <span>María Jiménez - Guardia</span>
+                        <span class="stage-badge stage-rejected">RECHAZADO</span>
+                    </div>
+                    <div class="candidate-item">
+                        <span>Pedro Salinas - Supervisor</span>
+                        <span class="stage-badge stage-interview">ENTREVISTA</span>
+                    </div>
+                </div>
+
+                <div class="talent-card">
+                    <div class="module-title">📚 Capacitación & Desarrollo</div>
+                    <div class="candidate-item">
+                        <span>Curso 120h Guardias</span>
+                        <span style="color: #27ae60;">34 completados</span>
+                    </div>
+                    <div class="candidate-item">
+                        <span>Manejo de Armas</span>
+                        <span style="color: #f39c12;">12 en curso</span>
+                    </div>
+                    <div class="candidate-item">
+                        <span>Primeros Auxilios</span>
+                        <span style="color: #3498db;">23 inscritos</span>
+                    </div>
+                    <div class="candidate-item">
+                        <span>Defensa Personal</span>
+                        <span style="color: #27ae60;">67 certificados</span>
+                    </div>
+                    <div class="candidate-item">
+                        <span>Liderazgo Supervisores</span>
+                        <span style="color: #f39c12;">8 en progreso</span>
+                    </div>
+                </div>
+
+                <div class="talent-card">
+                    <div class="module-title">⭐ Evaluaciones & KPIs</div>
+                    <div class="candidate-item">
+                        <span>Evaluaciones 360°</span>
+                        <span style="color: #27ae60;">289 completadas</span>
+                    </div>
+                    <div class="candidate-item">
+                        <span>Evaluaciones 90 días</span>
+                        <span style="color: #f39c12;">45 pendientes</span>
+                    </div>
+                    <div class="candidate-item">
+                        <span>Planes Desarrollo</span>
+                        <span style="color: #3498db;">67 activos</span>
+                    </div>
+                    <div class="candidate-item">
+                        <span>Promedio General</span>
+                        <span style="color: #27ae60;"><strong>8.4/10</strong></span>
+                    </div>
+                    <div class="candidate-item">
+                        <span>Alto Potencial</span>
+                        <span style="color: #e74c3c;">23 identificados</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics y BI -->
+            <div class="analytics-section">
+                <div class="analytics-card">
+                    <div class="module-title">📊 Business Intelligence & Analytics Predictivo</div>
+                    <div class="chart-placeholder">
+                        📈 Dashboard BI Interactivo<br>
+                        • Análisis Predictivo Rotación: 8.2% próximos 3 meses<br>
+                        • Optimización Costos: $45,678 ahorro potencial<br>
+                        • Identificación Talentos: 23 candidatos promoción<br>
+                        • Gaps Habilidades: Defensa Personal (34%), Inglés (67%)
+                    </div>
+                    <div class="module-actions">
+                        <a href="#" class="mini-btn">Dashboard BI</a>
+                        <a href="#" class="mini-btn">Reportes</a>
+                        <a href="#" class="mini-btn">Exportar</a>
+                        <a href="#" class="mini-btn">Configurar</a>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <div class="module-title">🎯 KPIs Estratégicos</div>
+                    <div class="metric-item" style="margin-bottom: 8px;">
+                        <div class="metric-value" style="color: #e74c3c;">8.2%</div>
+                        <div class="metric-label">Rotación Mensual</div>
+                    </div>
+                    <div class="metric-item" style="margin-bottom: 8px;">
+                        <div class="metric-value" style="color: #f39c12;">15 días</div>
+                        <div class="metric-label">Tiempo Contratación</div>
+                    </div>
+                    <div class="metric-item" style="margin-bottom: 8px;">
+                        <div class="metric-value" style="color: #27ae60;">$456,890</div>
+                        <div class="metric-label">Ahorro Automatización</div>
+                    </div>
+                    <div class="metric-item" style="margin-bottom: 8px;">
+                        <div class="metric-value" style="color: #3498db;">96.8%</div>
+                        <div class="metric-label">Satisfacción Cliente</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" style="color: #9b59b6;">4.8/5</div>
+                        <div class="metric-label">Employee Experience</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Integraciones y Ecosistema -->
+            <div class="integration-section">
+                <div class="integration-card">
+                    <div class="integration-status connected"></div>
+                    <div style="font-size: 12px; font-weight: 600; margin-bottom: 4px;">IESS Ecuador</div>
+                    <div style="font-size: 10px; color: #27ae60;">Conectado</div>
+                    <div style="font-size: 9px; color: #7f8c8d;">Sync: hace 15min</div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-status connected"></div>
+                    <div style="font-size: 12px; font-weight: 600; margin-bottom: 4px;">SUT Ministerio</div>
+                    <div style="font-size: 10px; color: #27ae60;">Conectado</div>
+                    <div style="font-size: 9px; color: #7f8c8d;">Último envío: hoy</div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-status syncing"></div>
+                    <div style="font-size: 12px; font-weight: 600; margin-bottom: 4px;">SAP Business One</div>
+                    <div style="font-size: 10px; color: #f39c12;">Sincronizando</div>
+                    <div style="font-size: 9px; color: #7f8c8d;">Contabilidad</div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-status connected"></div>
+                    <div style="font-size: 12px; font-weight: 600; margin-bottom: 4px;">Bancos Ecuador</div>
+                    <div style="font-size: 10px; color: #27ae60;">Conectado</div>
+                    <div style="font-size: 9px; color: #7f8c8d;">Transferencias auto</div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-status connected"></div>
+                    <div style="font-size: 12px; font-weight: 600; margin-bottom: 4px;">Biométricos</div>
+                    <div style="font-size: 10px; color: #27ae60;">45 Dispositivos</div>
+                    <div style="font-size: 9px; color: #7f8c8d;">Tiempo real</div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-status connected"></div>
+                    <div style="font-size: 12px; font-weight: 600; margin-bottom: 4px;">MS Teams</div>
+                    <div style="font-size: 10px; color: #27ae60;">Comunicación</div>
+                    <div style="font-size: 9px; color: #7f8c8d;">Notificaciones</div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-status connected"></div>
+                    <div style="font-size: 12px; font-weight: 600; margin-bottom: 4px;">Portal Empleado</div>
+                    <div style="font-size: 10px; color: #27ae60;">PWA + App Nativa</div>
+                    <div style="font-size: 9px; color: #7f8c8d;">1,156 usuarios</div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-status disconnected"></div>
+                    <div style="font-size: 12px; font-weight: 600; margin-bottom: 4px;">Oracle HCM</div>
+                    <div style="font-size: 10px; color: #e74c3c;">Desconectado</div>
+                    <div style="font-size: 9px; color: #7f8c8d;">Configurar</div>
+                </div>
+            </div>
+
+            <!-- Portal del Empleado - Vista Previa -->
+            <div class="employee-portal-preview">
+                <div class="module-title">📱 Portal Autoservicio Empleado - Estadísticas de Uso</div>
+                <div class="portal-feature">
+                    <span>📄 Descarga Recibos Nómina</span>
+                    <span class="usage-stats">2,456 descargas/mes</span>
+                </div>
+                <div class="portal-feature">
+                    <span>🏖️ Solicitudes Vacaciones</span>
+                    <span class="usage-stats">234 solicitudes</span>
+                </div>
+                <div class="portal-feature">
+                    <span>📋 Actualización Datos Personales</span>
+                    <span class="usage-stats">156 actualizaciones</span>
+                </div>
+                <div class="portal-feature">
+                    <span>💰 Solicitudes Anticipos</span>
+                    <span class="usage-stats">89 solicitudes</span>
+                </div>
+                <div class="portal-feature">
+                    <span>⏰ Consulta Horarios/Turnos</span>
+                    <span class="usage-stats">1,847 consultas</span>
+                </div>
+                <div class="portal-feature">
+                    <span>📚 Acceso Capacitaciones</span>
+                    <span class="usage-stats">456 accesos</span>
+                </div>
+                <div class="portal-feature">
+                    <span>📞 Contacto RRHH</span>
+                    <span class="usage-stats">67 consultas</span>
+                </div>
+            </div>
+
+            <!-- Acciones Rápidas Completas -->
+            <div class="quick-actions-grid">
+                <a href="#" class="action-btn massive-btn">
+                    <div class="action-icon">📋</div>
+                    <div>Cargas Masivas</div>
+                </a>
+                <a href="#" class="action-btn massive-btn">
+                    <div class="action-icon">🔧</div>
+                    <div>Correcciones</div>
+                </a>
+                <a href="#" class="action-btn massive-btn">
+                    <div class="action-icon">💰</div>
+                    <div>Liquidaciones</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">💵</div>
+                    <div>Procesar Nómina</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">👤</div>
+                    <div>Nuevo Empleado</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">📊</div>
+                    <div>Reporte IESS</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">🎓</div>
+                    <div>Reclutamiento</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">📈</div>
+                    <div>Evaluaciones</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">⏰</div>
+                    <div>Control Turnos</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">🎯</div>
+                    <div>Dotaciones</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">🏥</div>
+                    <div>Beneficios</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">📱</div>
+                    <div>Portal Empleado</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">🔗</div>
+                    <div>Integraciones</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">📊</div>
+                    <div>BI Analytics</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">⚖️</div>
+                    <div>Cumplimiento</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">🔧</div>
+                    <div>Configuración</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# Exclude sai_win folder completely
+sai_win/
+
+# Backup files
+*.bak
+*.backup
+
+# Database files
+*.mdb
+*.accdb
+
+# Temporary files
+*.tmp
+*.temp
+
+# Log files
+*.log
