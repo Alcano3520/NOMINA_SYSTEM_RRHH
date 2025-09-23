@@ -753,97 +753,97 @@ class SAICompleteApp:
         """Mostrar modulo de empleados completo"""
         # Importar desde archivo separado que vamos a crear
         from gui.modules.empleados_complete import EmpleadosCompleteModule
-        module = EmpleadosCompleteModule(self.content_area, self)
+        module = EmpleadosCompleteModule(self.content_area)
         self.status_label.config(text="Modulo Empleados - Gestion completa de personal")
 
     def show_nomina_module(self):
         """Mostrar modulo de nomina"""
         from gui.modules.nomina_complete import NominaCompleteModule
-        module = NominaCompleteModule(self.content_area, self)
+        module = NominaCompleteModule(self.content_area)
         self.status_label.config(text="Modulo Nomina - Procesamiento de roles de pago")
 
     def show_decimos_module(self):
         """Mostrar modulo de decimos"""
         from gui.modules.decimos_complete import DecimosCompleteModule
-        module = DecimosCompleteModule(self.content_area, self)
+        module = DecimosCompleteModule(self.content_area)
         self.status_label.config(text="Modulo Decimos - Gestion de 13vo y 14vo sueldo")
 
     def show_vacaciones_module(self):
         """Mostrar modulo de vacaciones"""
         from gui.modules.vacaciones_complete import VacacionesCompleteModule
-        module = VacacionesCompleteModule(self.content_area, self)
+        module = VacacionesCompleteModule(self.content_area)
         self.status_label.config(text="Modulo Vacaciones - Solicitudes y saldos")
 
     def show_liquidaciones_module(self):
         """Mostrar modulo de liquidaciones"""
         from gui.modules.liquidaciones_complete import LiquidacionesCompleteModule
-        module = LiquidacionesCompleteModule(self.content_area, self)
+        module = LiquidacionesCompleteModule(self.content_area)
         self.status_label.config(text="Modulo Liquidaciones - Calculo de finiquitos")
 
     def show_prestamos_module(self):
         """Mostrar modulo de prestamos"""
         from gui.modules.prestamos_complete import PrestamosCompleteModule
-        module = PrestamosCompleteModule(self.content_area, self)
+        module = PrestamosCompleteModule(self.content_area)
         self.status_label.config(text="Modulo Prestamos - Prestamos y anticipos")
 
     def show_egresos_module(self):
         """Mostrar modulo de egresos e ingresos"""
         from gui.modules.egresos_ingresos_complete import EgresosIngresosCompleteModule
-        module = EgresosIngresosCompleteModule(self.content_area, self)
+        module = EgresosIngresosCompleteModule(self.content_area)
         self.status_label.config(text="Modulo Egresos-Ingresos - Descuentos y bonificaciones")
 
     def show_dotacion_module(self):
         """Mostrar modulo de dotacion"""
         from gui.modules.dotacion_complete import DotacionCompleteModule
-        module = DotacionCompleteModule(self.content_area, self)
+        module = DotacionCompleteModule(self.content_area)
         self.status_label.config(text="Modulo Dotacion - Control de uniformes y equipos")
 
     def show_reportes_module(self):
         """Mostrar modulo de reportes"""
         from gui.modules.reportes_complete import ReportesCompleteModule
-        module = ReportesCompleteModule(self.content_area, self)
+        module = ReportesCompleteModule(self.content_area)
         self.status_label.config(text="Modulo Reportes - Generacion de informes PDF/Excel")
 
     def show_departamentos_module(self):
         """Mostrar modulo de departamentos"""
         from gui.modules.departamentos_complete import DepartamentosCompleteModule
-        module = DepartamentosCompleteModule(self.content_area, self)
+        module = DepartamentosCompleteModule(self.content_area)
         self.status_label.config(text="Configuracion - Departamentos y areas")
 
     def show_turnos_module(self):
         """Mostrar modulo de turnos"""
         from gui.modules.turnos_complete import TurnosCompleteModule
-        module = TurnosCompleteModule(self.content_area, self)
+        module = TurnosCompleteModule(self.content_area)
         self.status_label.config(text="Configuracion - Turnos y horarios")
 
     def show_equipos_module(self):
         """Mostrar modulo de equipos"""
         from gui.modules.equipos_complete import EquiposCompleteModule
-        module = EquiposCompleteModule(self.content_area, self)
+        module = EquiposCompleteModule(self.content_area)
         self.status_label.config(text="Configuracion - Equipos y herramientas")
 
     def show_clientes_module(self):
         """Mostrar modulo de clientes"""
         from gui.modules.clientes_complete import ClientesCompleteModule
-        module = ClientesCompleteModule(self.content_area, self)
+        module = ClientesCompleteModule(self.content_area)
         self.status_label.config(text="Configuracion - Clientes y contratos")
 
     def show_rpemplea_module(self):
         """Mostrar tabla RPEMPLEA"""
         from gui.modules.rpemplea_complete import RPEmpleaCompleteModule
-        module = RPEmpleaCompleteModule(self.content_area, self)
+        module = RPEmpleaCompleteModule(self.content_area)
         self.status_label.config(text="Base de Datos - Tabla RPEMPLEA")
 
     def show_rphistor_module(self):
         """Mostrar tabla RPHISTOR"""
         from gui.modules.rphistor_complete import RPHistorCompleteModule
-        module = RPHistorCompleteModule(self.content_area, self)
+        module = RPHistorCompleteModule(self.content_area)
         self.status_label.config(text="Base de Datos - Tabla RPHISTOR")
 
     def show_rpcontrl_module(self):
         """Mostrar tabla RPCONTRL"""
         from gui.modules.rpcontrl_complete import RPContrlCompleteModule
-        module = RPContrlCompleteModule(self.content_area, self)
+        module = RPContrlCompleteModule(self.content_area)
         self.status_label.config(text="Base de Datos - Tabla RPCONTRL")
 
     def show_module_placeholder(self, module_name):

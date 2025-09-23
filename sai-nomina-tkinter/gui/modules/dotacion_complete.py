@@ -1486,5 +1486,5 @@ class DotacionCompleteModule(tk.Frame):
 
     def __del__(self):
         """Destructor"""
-        if hasattr(self, 'session'):
+        if hasattr(self, 'session') and hasattr(self.session, 'close'):
             self.session.close()
