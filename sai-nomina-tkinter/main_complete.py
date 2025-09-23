@@ -337,6 +337,15 @@ class SAICompleteApp:
             ("RPCONTRL", "rpcontrl", "⚙️"),
         ])
 
+        # Separador
+        separator4 = tk.Frame(scrollable_frame, bg=self.config.COLORS['border'], height=1)
+        separator4.pack(fill="x", padx=20, pady=10)
+
+        # Menu administración
+        self.create_nav_menu(scrollable_frame, "ADMINISTRACIÓN", [
+            ("Configuración", "configuracion", "⚙️"),
+        ])
+
         # Pack canvas y scrollbar
         canvas.pack(side="left", fill="both", expand=True, padx=(0, 5))
         scrollbar.pack(side="right", fill="y")
@@ -942,31 +951,31 @@ class SAICompleteApp:
         self.status_label.config(text="Modulo Reportes - Generacion de informes PDF/Excel")
 
     def show_departamentos_module(self):
-        """Mostrar modulo de configuración del sistema"""
-        logger.info("🚀 INICIANDO carga del módulo CONFIGURACIÓN")
+        """Mostrar modulo de departamentos/puestos de seguridad"""
+        logger.info("🚀 INICIANDO carga del módulo DEPARTAMENTOS")
         try:
             logger.info("🧹 Limpiando área de contenido...")
             self.clear_content()
             logger.info("✅ Área de contenido limpiada correctamente")
 
-            logger.info("📦 Importando ConfiguracionCompleteModule...")
-            from gui.modules.configuracion_complete import ConfiguracionCompleteModule
-            logger.info("✅ Módulo ConfiguracionCompleteModule importado correctamente")
+            logger.info("📦 Importando DepartamentosCompleteModule...")
+            from gui.modules.departamentos_complete import DepartamentosCompleteModule
+            logger.info("✅ Módulo DepartamentosCompleteModule importado correctamente")
 
-            logger.info("🏗️ Creando instancia del módulo configuración...")
-            module = ConfiguracionCompleteModule(self.content_area)
-            logger.info("✅ Instancia del módulo configuración creada correctamente")
+            logger.info("🏗️ Creando instancia del módulo departamentos...")
+            module = DepartamentosCompleteModule(self.content_area)
+            logger.info("✅ Instancia del módulo departamentos creada correctamente")
 
             logger.info("📝 Actualizando status label...")
-            self.status_label.config(text="Configuración del Sistema - Parámetros y preferencias")
-            logger.info("🎉 MÓDULO CONFIGURACIÓN CARGADO EXITOSAMENTE")
+            self.status_label.config(text="Departamentos/Puestos de Seguridad - Gestión de ubicaciones y clientes")
+            logger.info("🎉 MÓDULO DEPARTAMENTOS CARGADO EXITOSAMENTE")
 
         except Exception as e:
-            logger.error(f"❌ ERROR cargando módulo configuración: {str(e)}")
+            logger.error(f"❌ ERROR cargando módulo departamentos: {str(e)}")
             logger.error(f"💥 Tipo de error: {type(e).__name__}")
             import traceback
             logger.error(f"📋 Traceback completo:\n{traceback.format_exc()}")
-            messagebox.showerror("Error", f"Error cargando módulo configuración: {str(e)}")
+            messagebox.showerror("Error", f"Error cargando módulo departamentos: {str(e)}")
 
     def show_turnos_module(self):
         """Mostrar modulo de turnos"""
@@ -1009,6 +1018,33 @@ class SAICompleteApp:
         from gui.modules.rpcontrl_complete import RPContrlCompleteModule
         module = RPContrlCompleteModule(self.content_area)
         self.status_label.config(text="Base de Datos - Tabla RPCONTRL")
+
+    def show_configuracion_module(self):
+        """Mostrar modulo de configuración del sistema"""
+        logger.info("🚀 INICIANDO carga del módulo CONFIGURACIÓN")
+        try:
+            logger.info("🧹 Limpiando área de contenido...")
+            self.clear_content()
+            logger.info("✅ Área de contenido limpiada correctamente")
+
+            logger.info("📦 Importando ConfiguracionCompleteModule...")
+            from gui.modules.configuracion_complete import ConfiguracionCompleteModule
+            logger.info("✅ Módulo ConfiguracionCompleteModule importado correctamente")
+
+            logger.info("🏗️ Creando instancia del módulo configuración...")
+            module = ConfiguracionCompleteModule(self.content_area)
+            logger.info("✅ Instancia del módulo configuración creada correctamente")
+
+            logger.info("📝 Actualizando status label...")
+            self.status_label.config(text="Configuración del Sistema - Parámetros y preferencias")
+            logger.info("🎉 MÓDULO CONFIGURACIÓN CARGADO EXITOSAMENTE")
+
+        except Exception as e:
+            logger.error(f"❌ ERROR cargando módulo configuración: {str(e)}")
+            logger.error(f"💥 Tipo de error: {type(e).__name__}")
+            import traceback
+            logger.error(f"📋 Traceback completo:\n{traceback.format_exc()}")
+            messagebox.showerror("Error", f"Error cargando módulo configuración: {str(e)}")
 
     def show_module_placeholder(self, module_name):
         """Mostrar placeholder temporal"""

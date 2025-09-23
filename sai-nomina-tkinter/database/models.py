@@ -153,16 +153,249 @@ class IngresoDescuento(Base):
     # Relación
     empleado_rel = relationship("Empleado", back_populates="ingresos_descuentos")
 
-class Departamento(Base):
-    """Catálogo de departamentos"""
-    __tablename__ = "departamentos"
+class Cliente(Base):
+    """Clientes de la empresa de seguridad"""
+    __tablename__ = "clientes"
 
-    codigo = Column(String(3), primary_key=True)
-    nombre = Column(String(100), nullable=False)
-    responsable = Column(String(6))  # Código empleado
-    centro_costo = Column(String(10))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    codigo = Column(String(10), unique=True, nullable=False)
+    ruc = Column(String(13), unique=True)
+    razon_social = Column(String(200), nullable=False)
+    nombre_comercial = Column(String(200))
+    direccion = Column(String(300))
+    telefono = Column(String(20))
+    email = Column(String(100))
+    contacto = Column(String(100))
+    telefono_contacto = Column(String(20))
+    email_contacto = Column(String(100))
+    estado = Column(String(10), default='ACTIVO')  # ACTIVO, INACTIVO, SUSPENDIDO
+    fecha_inicio = Column(Date)
+    fecha_fin = Column(Date)
+    valor_mensual = Column(Numeric(10, 2))
+    observaciones = Column(Text)
     activo = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+    created_by = Column(String(20))
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_by = Column(String(20))
+
+    # Relaciones
+    departamentos = relationship("Departamento", back_populates="cliente_rel", cascade="all, delete-orphan")
+
+    __table_args__ = (
+        Index('idx_cliente_codigo', 'codigo'),
+        Index('idx_cliente_ruc', 'ruc'),
+        Index('idx_cliente_estado', 'estado'),
+    )
+
+class Departamento(Base):
+    """Puestos de trabajo / Departamentos de seguridad"""
+    __tablename__ = "departamentos"
+
+    codigo = Column(String(10), primary_key=True)
+    nombre_codigo = Column(String(100), nullable=False)  # Ej: "GAMMA 4"
+    nombre_real = Column(String(200), nullable=False)    # Ej: "RICOCENTRO NORTE"
+    cliente_id = Column(Integer, ForeignKey('clientes.id'), nullable=False)
+    direccion = Column(String(300))
+    sector = Column(String(100))  # Zona de la ciudad
+    tipo_puesto = Column(String(50))  # COMERCIAL, RESIDENCIAL, INDUSTRIAL, etc.
+
+    # Configuración del puesto
+    guardias_requeridos = Column(Integer, default=1)
+    turnos_por_dia = Column(Integer, default=3)  # 3 turnos: mañana, tarde, noche
+    horas_por_turno = Column(Integer, default=8)
+    sueldo_base = Column(Numeric(10, 2))
+
+    # Información operativa
+    responsable = Column(String(6))  # Código empleado supervisor
+    telefono = Column(String(20))
+    referencia = Column(String(200))  # Referencias para ubicar el lugar
+    acceso = Column(Text)  # Instrucciones de acceso
+
+    # Estados
+    estado = Column(String(10), default='ACTIVO')  # ACTIVO, INACTIVO, SUSPENDIDO
+    permite_franco = Column(Boolean, default=True)  # Si permite guardias de franco
+    es_24_horas = Column(Boolean, default=True)
+
+    # Fechas
+    fecha_inicio = Column(Date)
+    fecha_fin = Column(Date)
+
+    # Observaciones y notas
+    observaciones = Column(Text)
+    instrucciones = Column(Text)  # Instrucciones específicas del puesto
+
+    # Control
+    activo = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    created_by = Column(String(20))
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_by = Column(String(20))
+
+    # Relaciones
+    cliente_rel = relationship("Cliente", back_populates="departamentos")
+    asignaciones = relationship("AsignacionDepartamento", back_populates="departamento_rel", cascade="all, delete-orphan")
+    turnos = relationship("Turno", back_populates="departamento_rel", cascade="all, delete-orphan")
+
+    __table_args__ = (
+        Index('idx_depto_cliente', 'cliente_id'),
+        Index('idx_depto_codigo', 'codigo'),
+        Index('idx_depto_estado', 'estado'),
+    )
+
+class AsignacionDepartamento(Base):
+    """Asignación de empleados a departamentos/puestos"""
+    __tablename__ = "asignaciones_departamento"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    empleado = Column(String(6), ForeignKey('rpemplea.empleado'), nullable=False)
+    departamento_codigo = Column(String(10), ForeignKey('departamentos.codigo'), nullable=False)
+    fecha_desde = Column(Date, nullable=False)
+    fecha_hasta = Column(Date)
+    tipo_asignacion = Column(String(20), default='FIJO')  # FIJO, FRANCO, TEMPORAL, REEMPLAZO
+    turno_id = Column(Integer, ForeignKey('turnos.id'))
+    es_responsable = Column(Boolean, default=False)
+    estado = Column(String(10), default='ACTIVO')
+    observaciones = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    created_by = Column(String(20))
+
+    # Relaciones
+    empleado_rel = relationship("Empleado")
+    departamento_rel = relationship("Departamento", back_populates="asignaciones")
+    turno_rel = relationship("Turno", back_populates="asignaciones")
+
+    __table_args__ = (
+        Index('idx_asignacion_empleado', 'empleado'),
+        Index('idx_asignacion_depto', 'departamento_codigo'),
+        Index('idx_asignacion_fecha', 'fecha_desde', 'fecha_hasta'),
+    )
+
+class Turno(Base):
+    """Turnos de trabajo"""
+    __tablename__ = "turnos"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    nombre = Column(String(50), nullable=False)  # Ej: "MAÑANA", "TARDE", "NOCHE"
+    codigo = Column(String(10), unique=True, nullable=False)  # Ej: "M", "T", "N"
+    hora_inicio = Column(String(5), nullable=False)  # Formato HH:MM
+    hora_fin = Column(String(5), nullable=False)    # Formato HH:MM
+    horas_duracion = Column(Integer, nullable=False)
+    es_nocturno = Column(Boolean, default=False)
+    recargo_nocturno = Column(Numeric(5, 2), default=0.00)  # % adicional
+
+    # Configuración por departamento
+    departamento_codigo = Column(String(10), ForeignKey('departamentos.codigo'))
+    sueldo_adicional = Column(Numeric(10, 2), default=0.00)
+
+    # Días de la semana (1=Lunes, 7=Domingo)
+    lunes = Column(Boolean, default=True)
+    martes = Column(Boolean, default=True)
+    miercoles = Column(Boolean, default=True)
+    jueves = Column(Boolean, default=True)
+    viernes = Column(Boolean, default=True)
+    sabado = Column(Boolean, default=True)
+    domingo = Column(Boolean, default=True)
+
+    estado = Column(String(10), default='ACTIVO')
+    observaciones = Column(Text)
+    activo = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    created_by = Column(String(20))
+
+    # Relaciones
+    departamento_rel = relationship("Departamento", back_populates="turnos")
+    asignaciones = relationship("AsignacionDepartamento", back_populates="turno_rel")
+
+    __table_args__ = (
+        Index('idx_turno_codigo', 'codigo'),
+        Index('idx_turno_depto', 'departamento_codigo'),
+    )
+
+class Equipo(Base):
+    """Equipos y herramientas de seguridad"""
+    __tablename__ = "equipos"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    codigo = Column(String(20), unique=True, nullable=False)
+    nombre = Column(String(100), nullable=False)
+    tipo = Column(String(50))  # RADIO, LINTERNA, ARMA, CHALECO, etc.
+    marca = Column(String(50))
+    modelo = Column(String(50))
+    serie = Column(String(100))
+
+    # Estado y ubicación
+    estado = Column(String(20), default='DISPONIBLE')  # DISPONIBLE, ASIGNADO, MANTENIMIENTO, DAÑADO, PERDIDO
+    departamento_codigo = Column(String(10), ForeignKey('departamentos.codigo'))
+    empleado_asignado = Column(String(6), ForeignKey('rpemplea.empleado'))
+
+    # Información del equipo
+    fecha_compra = Column(Date)
+    valor_compra = Column(Numeric(10, 2))
+    proveedor = Column(String(100))
+    garantia_hasta = Column(Date)
+
+    # Mantenimiento
+    requiere_mantenimiento = Column(Boolean, default=False)
+    frecuencia_mantenimiento = Column(Integer)  # días
+    ultimo_mantenimiento = Column(Date)
+    proximo_mantenimiento = Column(Date)
+
+    # Características
+    peso = Column(Numeric(8, 2))
+    dimensiones = Column(String(50))
+    color = Column(String(30))
+    material = Column(String(50))
+
+    # Control
+    observaciones = Column(Text)
+    foto = Column(Text)  # Path o base64 de la foto
+    activo = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    created_by = Column(String(20))
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_by = Column(String(20))
+
+    # Relaciones
+    departamento_rel = relationship("Departamento")
+    empleado_rel = relationship("Empleado")
+    historial_equipos = relationship("HistorialEquipo", back_populates="equipo_rel", cascade="all, delete-orphan")
+
+    __table_args__ = (
+        Index('idx_equipo_codigo', 'codigo'),
+        Index('idx_equipo_tipo', 'tipo'),
+        Index('idx_equipo_estado', 'estado'),
+        Index('idx_equipo_depto', 'departamento_codigo'),
+    )
+
+class HistorialEquipo(Base):
+    """Historial de movimientos de equipos"""
+    __tablename__ = "historial_equipos"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    equipo_id = Column(Integer, ForeignKey('equipos.id'), nullable=False)
+    empleado = Column(String(6), ForeignKey('rpemplea.empleado'))
+    departamento_codigo = Column(String(10), ForeignKey('departamentos.codigo'))
+
+    tipo_movimiento = Column(String(20), nullable=False)  # ASIGNACION, DEVOLUCION, MANTENIMIENTO, BAJA
+    fecha_movimiento = Column(DateTime, default=datetime.utcnow)
+    estado_anterior = Column(String(20))
+    estado_nuevo = Column(String(20))
+
+    motivo = Column(String(200))
+    observaciones = Column(Text)
+    responsable = Column(String(20))  # Usuario que realizó el movimiento
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    # Relaciones
+    equipo_rel = relationship("Equipo", back_populates="historial_equipos")
+    empleado_rel = relationship("Empleado")
+    departamento_rel = relationship("Departamento")
+
+    __table_args__ = (
+        Index('idx_historial_equipo', 'equipo_id'),
+        Index('idx_historial_fecha', 'fecha_movimiento'),
+    )
 
 class Cargo(Base):
     """Catálogo de cargos"""
