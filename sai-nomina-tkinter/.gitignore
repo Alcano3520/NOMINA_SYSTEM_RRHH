@@ -1,0 +1,224 @@
+# SAI - Sistema Administrativo Integral
+# Archivo .gitignore para el proyecto
+
+# =============================
+# ARCHIVOS PYTHON
+# =============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# =============================
+# ENTORNOS VIRTUALES
+# =============================
+sai_env/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# =============================
+# BASE DE DATOS
+# =============================
+*.db
+*.sqlite3
+sai_nomina.db*
+database/*.db
+backups/*.db
+
+# =============================
+# ARCHIVOS DE LOG
+# =============================
+logs/
+*.log
+log/
+sai_*.log
+
+# =============================
+# ARCHIVOS TEMPORALES
+# =============================
+.tmp/
+temp/
+tmp/
+*.tmp
+*.temp
+
+# =============================
+# REPORTES GENERADOS
+# =============================
+reports/*.pdf
+reports/*.xlsx
+reports/*.csv
+reportes/
+
+# =============================
+# RESPALDOS
+# =============================
+backups/
+*.backup
+*.bak
+
+# =============================
+# ARCHIVOS DE CONFIGURACIÓN LOCAL
+# =============================
+.env
+.env.local
+.env.*.local
+config_local.py
+settings_local.py
+
+# =============================
+# ARCHIVOS DEL SISTEMA
+# =============================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# =============================
+# EDITORES DE CÓDIGO
+# =============================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# =============================
+# JUPYTER NOTEBOOKS
+# =============================
+.ipynb_checkpoints
+
+# =============================
+# PYTEST
+# =============================
+.pytest_cache/
+.coverage
+htmlcov/
+
+# =============================
+# ESPECÍFICOS DEL PROYECTO SAI
+# =============================
+# Carpeta que no debe subirse según usuario
+sai_win/
+
+# Archivos de empleados de prueba
+empleados_test.xlsx
+empleados_test.csv
+
+# Datos sensibles
+datos_reales/
+empleados_reales/
+nomina_real/
+
+# Archivos de desarrollo
+test_data/
+debug/
+experimentos/
+
+# =============================
+# ARCHIVOS GRANDES
+# =============================
+*.zip
+*.rar
+*.7z
+*.tar.gz
+
+# =============================
+# CERTIFICADOS Y LLAVES
+# =============================
+*.pem
+*.key
+*.cert
+certificados/
+
+# =============================
+# ARCHIVOS DE INSTALACIÓN
+# =============================
+*.msi
+*.exe
+instaladores/
+
+# =============================
+# DOCUMENTACIÓN GENERADA
+# =============================
+docs/_build/
+site/
+
+# =============================
+# CACHÉ DE PYTHON
+# =============================
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# =============================
+# COVERAGE REPORTS
+# =============================
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# =============================
+# ARCHIVOS DE TRADUCCIÓN
+# =============================
+*.mo
+*.pot
+
+# =============================
+# FRAMEWORKS ESPECÍFICOS
+# =============================
+# Flask
+instance/
+.webassets-cache
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+
+# =============================
+# HERRAMIENTAS DE DESARROLLO
+# =============================
+.spyderproject
+.spyproject
+.ropeproject
+
+# =============================
+# ARCHIVOS DE PACKAGING
+# =============================
+*.dmg
+*.pkg
+
+# Fin del archivo .gitignore

@@ -1,0 +1,109 @@
+# =========================================================
+# SAI - Sistema Administrativo Integral
+# Sistema de Nómina y RRHH para Ecuador
+# =========================================================
+
+# DEPENDENCIAS PRINCIPALES
+# =========================================================
+
+# Base de datos y ORM
+sqlalchemy>=1.4.0
+pandas>=1.3.0
+
+# Manipulación de archivos Excel/CSV
+openpyxl>=3.0.9
+xlrd>=2.0.1
+
+# Generación de reportes PDF
+reportlab>=3.6.0
+
+# Gráficos y visualización
+matplotlib>=3.5.0
+
+# Procesamiento de imágenes
+Pillow>=8.3.0
+
+# Manejo de fechas y tiempo
+python-dateutil>=2.8.2
+arrow>=1.2.2
+
+# Análisis y cálculos científicos
+numpy>=1.21.0
+scipy>=1.7.0
+
+# Validaciones y formateo
+validators>=0.18.2
+babel>=2.9.1
+
+# Números en texto (para reportes)
+num2words>=0.5.10
+
+# DEPENDENCIAS OPCIONALES
+# =========================================================
+
+# Widget de calendario para GUI
+tkcalendar>=1.6.1
+
+# Logs mejorados con colores
+coloredlogs>=15.0.1
+
+# Seguridad y encriptación
+cryptography>=3.4.8
+
+# Códigos QR para reportes
+qrcode>=7.3.1
+
+# Códigos de barras
+python-barcode>=0.13.1
+
+# Notificaciones del sistema
+plyer>=2.1.0
+
+# Configuración YAML
+PyYAML>=5.4.1
+
+# Programación de tareas
+schedule>=1.1.0
+
+# DEPENDENCIAS DEL SISTEMA
+# =========================================================
+# Estas librerías vienen incluidas con Python
+# Se listan solo para referencia:
+
+# configparser - Manejo de archivos de configuración
+# pathlib - Manipulación de rutas
+# tkinter - Interfaz gráfica (incluido en Python)
+# sqlite3 - Base de datos SQLite (incluido en Python)
+# datetime - Manejo de fechas (incluido en Python)
+# decimal - Cálculos precisos (incluido en Python)
+# logging - Sistema de logs (incluido en Python)
+# re - Expresiones regulares (incluido en Python)
+# os - Funciones del sistema operativo (incluido en Python)
+# json - Manejo de JSON (incluido en Python)
+# csv - Lectura/escritura CSV (incluido en Python)
+# zipfile - Manipulación de archivos ZIP (incluido en Python)
+# hashlib - Funciones hash (incluido en Python)
+# smtplib - Cliente SMTP (incluido en Python)
+# ftplib - Cliente FTP (incluido en Python)
+
+# INSTALACIÓN
+# =========================================================
+# Instalar dependencias principales:
+# pip install -r requirements.txt
+
+# Instalar todas las dependencias (incluyendo opcionales):
+# pip install -r requirements.txt --upgrade
+
+# Para desarrollo, instalar en modo editable:
+# pip install -e .
+
+# NOTAS TÉCNICAS
+# =========================================================
+# - Python 3.8+ requerido
+# - Compatible con Windows, Linux y macOS
+# - GUI desarrollada con tkinter nativo
+# - Base de datos SQLite para portabilidad
+# - Validaciones específicas para Ecuador (cédula, RUC)
+# - Cálculos de nómina según legislación ecuatoriana
+# - Soporte para importación masiva Excel/CSV
+# - Generación de reportes PDF profesionales
