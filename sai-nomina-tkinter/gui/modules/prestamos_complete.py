@@ -38,6 +38,7 @@ class PrestamosCompleteModule(tk.Frame):
         self.tipo_prestamo_var = tk.StringVar(value="quirografario")
         self.tipo_interes_var = tk.StringVar(value="fijo")
 
+        self.pack(fill="both", expand=True)
         self.setup_ui()
         self.load_employees()
 

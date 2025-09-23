@@ -37,6 +37,7 @@ class DotacionCompleteModule(tk.Frame):
         self.selected_item = None
         self.tipo_dotacion_var = tk.StringVar(value="uniforme")
 
+        self.pack(fill="both", expand=True)
         self.setup_ui()
         self.load_data()
 

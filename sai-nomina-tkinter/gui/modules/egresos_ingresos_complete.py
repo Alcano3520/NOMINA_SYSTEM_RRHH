@@ -38,6 +38,7 @@ class EgresosIngresosCompleteModule(tk.Frame):
         self.tipo_movimiento_var = tk.StringVar(value="ingreso")
         self.categoria_var = tk.StringVar(value="sueldo")
 
+        self.pack(fill="both", expand=True)
         self.setup_ui()
         self.load_employees()
 

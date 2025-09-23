@@ -30,6 +30,7 @@ class ReportesCompleteModule(tk.Frame):
         self.format_var = tk.StringVar(value="pdf")
         self.period_type_var = tk.StringVar(value="mensual")
 
+        self.pack(fill="both", expand=True)
         self.setup_ui()
         self.load_data()
 

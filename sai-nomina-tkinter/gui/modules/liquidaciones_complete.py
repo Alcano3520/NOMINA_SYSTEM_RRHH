@@ -37,6 +37,7 @@ class LiquidacionesCompleteModule(tk.Frame):
         self.motivo_liquidacion_var = tk.StringVar(value="renuncia")
         self.tipo_liquidacion_var = tk.StringVar(value="total")
 
+        self.pack(fill="both", expand=True)
         self.setup_ui()
         self.load_employees()
 

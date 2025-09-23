@@ -38,6 +38,7 @@ class VacacionesCompleteModule(tk.Frame):
         self.selected_period = None
         self.solicitud_tipo_var = tk.StringVar(value="programada")
 
+        self.pack(fill="both", expand=True)
         self.setup_ui()
         self.load_employees()
 

@@ -30,6 +30,7 @@ class DecimosCompleteModule(tk.Frame):
         self.periodo_var = tk.StringVar(value=str(date.today().year))
         self.tipo_decimo_var = tk.StringVar(value="13")
 
+        self.pack(fill="both", expand=True)
         self.setup_ui()
         self.load_employees()
 
