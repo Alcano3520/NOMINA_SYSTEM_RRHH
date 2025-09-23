@@ -16,6 +16,7 @@ import calendar
 from config import Config
 from database.connection import get_session
 from database.models import Empleado, RolPago, IngresoDescuento
+from gui.components.carga_masiva import show_carga_masiva_nomina
 
 logger = logging.getLogger(__name__)
 
@@ -122,6 +123,7 @@ class NominaCompleteModule(tk.Frame):
         row2_frame.pack(fill="x")
 
         buttons = [
+            ("📊 Carga Masiva", self.carga_masiva_nomina, '#38a169'),
             ("🔄 Calcular Nómina", self.calculate_payroll, Config.COLORS['primary']),
             ("💾 Procesar Roles", self.process_payroll, Config.COLORS['success']),
             ("📄 Generar Reporte", self.generate_report, Config.COLORS['info']),
@@ -764,3 +766,13 @@ class NominaCompleteModule(tk.Frame):
 
         except Exception as e:
             logger.error(f"Error en resumen por departamento: {e}")
+
+    def carga_masiva_nomina(self):
+        """Abrir ventana de carga masiva de nómina"""
+        try:
+            show_carga_masiva_nomina(self, self.session)
+            # Recargar datos después de la carga masiva
+            self.load_current_period()
+        except Exception as e:
+            logger.error(f"Error en carga masiva de nómina: {e}")
+            messagebox.showerror("Error", f"Error abriendo carga masiva: {str(e)}")

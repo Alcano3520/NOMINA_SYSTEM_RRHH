@@ -265,13 +265,13 @@ class SAICompleteApp:
         sidebar_frame.grid(row=0, column=0, sticky="nsew", padx=(0, 20))
         sidebar_frame.pack_propagate(False)
 
-        # Header sidebar
+        # Header sidebar (fijo)
         sidebar_header = tk.Frame(sidebar_frame, bg='white')
         sidebar_header.pack(fill="x", padx=20, pady=(20, 10))
 
         nav_title = tk.Label(
             sidebar_header,
-            text="MODULOS PRINCIPALES",
+            text="SISTEMA SAI - NAVEGACIÓN",
             font=('Arial', 12, 'bold'),
             bg='white',
             fg=self.config.COLORS['secondary']
@@ -282,8 +282,26 @@ class SAICompleteApp:
         separator1 = tk.Frame(sidebar_header, bg=self.config.COLORS['border'], height=2)
         separator1.pack(fill="x", pady=(10, 0))
 
+        # Crear area scrollable para los módulos
+        self.create_scrollable_sidebar_content(sidebar_frame)
+
+    def create_scrollable_sidebar_content(self, parent):
+        """Crear contenido scrollable para el sidebar"""
+        # Canvas y scrollbar para hacer scrollable el contenido
+        canvas = tk.Canvas(parent, bg='white', highlightthickness=0)
+        scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg='white')
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
         # Menu principal
-        self.create_nav_menu(sidebar_frame, "MODULOS PRINCIPALES", [
+        self.create_nav_menu(scrollable_frame, "MODULOS PRINCIPALES", [
             ("Dashboard", "dashboard", "🏠"),
             ("Empleados", "empleados", "👥"),
             ("Nomina", "nomina", "💰"),
@@ -297,11 +315,11 @@ class SAICompleteApp:
         ])
 
         # Separador
-        separator2 = tk.Frame(sidebar_frame, bg=self.config.COLORS['border'], height=1)
+        separator2 = tk.Frame(scrollable_frame, bg=self.config.COLORS['border'], height=1)
         separator2.pack(fill="x", padx=20, pady=10)
 
         # Menu configuracion
-        self.create_nav_menu(sidebar_frame, "CONFIGURACION", [
+        self.create_nav_menu(scrollable_frame, "CONFIGURACION", [
             ("Departamentos", "departamentos", "🏢"),
             ("Turnos", "turnos", "🕐"),
             ("Equipos", "equipos", "⛑️"),
@@ -309,15 +327,25 @@ class SAICompleteApp:
         ])
 
         # Separador
-        separator3 = tk.Frame(sidebar_frame, bg=self.config.COLORS['border'], height=1)
+        separator3 = tk.Frame(scrollable_frame, bg=self.config.COLORS['border'], height=1)
         separator3.pack(fill="x", padx=20, pady=10)
 
         # Menu base de datos
-        self.create_nav_menu(sidebar_frame, "BASE DE DATOS", [
+        self.create_nav_menu(scrollable_frame, "BASE DE DATOS", [
             ("RPEMPLEA", "rpemplea", "📋"),
             ("RPHISTOR", "rphistor", "📚"),
             ("RPCONTRL", "rpcontrl", "⚙️"),
         ])
+
+        # Pack canvas y scrollbar
+        canvas.pack(side="left", fill="both", expand=True, padx=(0, 5))
+        scrollbar.pack(side="right", fill="y")
+
+        # Binding para scroll con rueda del ratón
+        def _on_mousewheel(event):
+            canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
     def create_nav_menu(self, parent, title, items):
         """Crear menu de navegacion"""
@@ -529,6 +557,7 @@ class SAICompleteApp:
         try:
             from database.connection import get_session
             from database.models import Empleado, RolPago, Vacacion, Prestamo
+            from gui.components.visual_improvements import StatCard, show_toast
 
             session = get_session()
 

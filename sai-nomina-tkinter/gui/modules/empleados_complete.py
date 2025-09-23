@@ -15,6 +15,7 @@ from decimal import Decimal
 from config import Config
 from database.connection import get_session
 from database.models import Empleado, Departamento, Cargo
+from gui.components.carga_masiva import show_carga_masiva_empleados
 
 logger = logging.getLogger(__name__)
 
@@ -208,8 +209,8 @@ class EmpleadosCompleteModule(tk.Frame):
 
         import_btn = tk.Button(
             buttons_frame,
-            text="📁 Importar",
-            command=self.import_employees,
+            text="📊 Carga Masiva",
+            command=self.carga_masiva_empleados,
             bg=Config.COLORS['info'],
             fg='white',
             font=('Arial', 10),
@@ -1048,48 +1049,16 @@ class EmpleadosCompleteModule(tk.Frame):
                 logger.error(f"Error eliminando empleado: {e}")
                 messagebox.showerror("Error", f"Error al eliminar: {str(e)}")
 
+    def carga_masiva_empleados(self):
+        """Abrir ventana de carga masiva de empleados"""
+        try:
+            show_carga_masiva_empleados(self, self.session)
+            # Recargar empleados después de la carga masiva
+            self.load_employees()
+        except Exception as e:
+            logger.error(f"Error en carga masiva: {e}")
+            messagebox.showerror("Error", f"Error abriendo carga masiva: {str(e)}")
+
     def import_employees(self):
-        """Importar empleados desde Excel"""
-        file_path = filedialog.askopenfilename(
-            title="Seleccionar archivo Excel",
-            filetypes=[("Excel files", "*.xlsx *.xls"), ("All files", "*.*")]
-        )
-
-        if file_path:
-            try:
-                # Leer Excel
-                df = pd.read_excel(file_path)
-
-                # Procesar filas
-                imported = 0
-                for index, row in df.iterrows():
-                    # Crear empleado
-                    employee = Empleado()
-
-                    # Mapear campos (ajustar según estructura del Excel)
-                    if 'empleado' in row:
-                        employee.empleado = str(row['empleado'])
-                    if 'cedula' in row:
-                        employee.cedula = str(row['cedula'])
-                    if 'nombres' in row:
-                        employee.nombres = str(row['nombres']).upper()
-                    if 'apellidos' in row:
-                        employee.apellidos = str(row['apellidos']).upper()
-
-                    # Solo agregar si tiene datos minimos
-                    if employee.cedula and employee.nombres:
-                        try:
-                            self.session.add(employee)
-                            imported += 1
-                        except:
-                            continue
-
-                self.session.commit()
-                self.load_employees()
-
-                messagebox.showinfo("Éxito", f"Se importaron {imported} empleados correctamente")
-
-            except Exception as e:
-                self.session.rollback()
-                logger.error(f"Error importando empleados: {e}")
-                messagebox.showerror("Error", f"Error al importar: {str(e)}")
+        """Método legacy - usar carga_masiva_empleados en su lugar"""
+        self.carga_masiva_empleados()
