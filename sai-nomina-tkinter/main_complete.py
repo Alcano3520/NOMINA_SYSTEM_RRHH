@@ -942,11 +942,31 @@ class SAICompleteApp:
         self.status_label.config(text="Modulo Reportes - Generacion de informes PDF/Excel")
 
     def show_departamentos_module(self):
-        """Mostrar modulo de departamentos"""
-        self.clear_content()
-        from gui.modules.departamentos_complete import DepartamentosCompleteModule
-        module = DepartamentosCompleteModule(self.content_area)
-        self.status_label.config(text="Configuracion - Departamentos y areas")
+        """Mostrar modulo de configuración del sistema"""
+        logger.info("🚀 INICIANDO carga del módulo CONFIGURACIÓN")
+        try:
+            logger.info("🧹 Limpiando área de contenido...")
+            self.clear_content()
+            logger.info("✅ Área de contenido limpiada correctamente")
+
+            logger.info("📦 Importando ConfiguracionCompleteModule...")
+            from gui.modules.configuracion_complete import ConfiguracionCompleteModule
+            logger.info("✅ Módulo ConfiguracionCompleteModule importado correctamente")
+
+            logger.info("🏗️ Creando instancia del módulo configuración...")
+            module = ConfiguracionCompleteModule(self.content_area)
+            logger.info("✅ Instancia del módulo configuración creada correctamente")
+
+            logger.info("📝 Actualizando status label...")
+            self.status_label.config(text="Configuración del Sistema - Parámetros y preferencias")
+            logger.info("🎉 MÓDULO CONFIGURACIÓN CARGADO EXITOSAMENTE")
+
+        except Exception as e:
+            logger.error(f"❌ ERROR cargando módulo configuración: {str(e)}")
+            logger.error(f"💥 Tipo de error: {type(e).__name__}")
+            import traceback
+            logger.error(f"📋 Traceback completo:\n{traceback.format_exc()}")
+            messagebox.showerror("Error", f"Error cargando módulo configuración: {str(e)}")
 
     def show_turnos_module(self):
         """Mostrar modulo de turnos"""
