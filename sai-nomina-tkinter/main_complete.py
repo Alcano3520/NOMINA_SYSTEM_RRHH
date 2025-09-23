@@ -753,13 +753,13 @@ class SAICompleteApp:
         """Mostrar modulo de empleados completo"""
         # Importar desde archivo separado que vamos a crear
         from gui.modules.empleados_complete import EmpleadosCompleteModule
-        module = EmpleadosCompleteModule(self.content_area)
+        module = EmpleadosCompleteModule(self.content_area, self)
         self.status_label.config(text="Modulo Empleados - Gestion completa de personal")
 
     def show_nomina_module(self):
         """Mostrar modulo de nomina"""
         from gui.modules.nomina_complete import NominaCompleteModule
-        module = NominaCompleteModule(self.content_area)
+        module = NominaCompleteModule(self.content_area, self)
         self.status_label.config(text="Modulo Nomina - Procesamiento de roles de pago")
 
     def show_decimos_module(self):
