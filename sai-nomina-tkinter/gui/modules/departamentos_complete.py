@@ -193,7 +193,9 @@ class DepartamentosCompleteModule(tk.Frame):
             padx=15,
             pady=15
         )
-        right_frame.pack(side="right", fill="y", width=450)
+        right_frame.pack(side="right", fill="y")
+        right_frame.configure(width=450)
+        right_frame.pack_propagate(False)
 
         # Canvas y scrollbar para formulario
         canvas = tk.Canvas(right_frame, bg='white')
