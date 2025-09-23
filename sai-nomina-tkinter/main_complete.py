@@ -746,8 +746,16 @@ class SAICompleteApp:
 
     def clear_content(self):
         """Limpiar area de contenido"""
-        for widget in self.content_area.winfo_children():
-            widget.destroy()
+        try:
+            children = self.content_area.winfo_children()
+            logger.info(f"🧹 Limpiando {len(children)} widgets del área de contenido")
+            for i, widget in enumerate(children):
+                logger.debug(f"🗑️ Destruyendo widget {i+1}/{len(children)}: {type(widget).__name__}")
+                widget.destroy()
+            logger.info("✅ Área de contenido limpiada exitosamente")
+        except Exception as e:
+            logger.error(f"❌ Error limpiando área de contenido: {str(e)}")
+            raise
 
     def show_empleados_module(self):
         """Mostrar modulo de empleados completo"""
@@ -766,45 +774,165 @@ class SAICompleteApp:
 
     def show_decimos_module(self):
         """Mostrar modulo de decimos"""
-        self.clear_content()
-        from gui.modules.decimos_complete import DecimosCompleteModule
-        module = DecimosCompleteModule(self.content_area)
-        self.status_label.config(text="Modulo Decimos - Gestion de 13vo y 14vo sueldo")
+        logger.info("🚀 INICIANDO carga del módulo DÉCIMOS")
+        try:
+            logger.info("🧹 Limpiando área de contenido...")
+            self.clear_content()
+            logger.info("✅ Área de contenido limpiada correctamente")
+
+            logger.info("📦 Importando DecimosCompleteModule...")
+            from gui.modules.decimos_complete import DecimosCompleteModule
+            logger.info("✅ Módulo DecimosCompleteModule importado correctamente")
+
+            logger.info("🏗️ Creando instancia del módulo décimos...")
+            module = DecimosCompleteModule(self.content_area)
+            logger.info("✅ Instancia del módulo décimos creada correctamente")
+
+            logger.info("📝 Actualizando status label...")
+            self.status_label.config(text="Modulo Decimos - Gestion de 13vo y 14vo sueldo")
+            logger.info("🎉 MÓDULO DÉCIMOS CARGADO EXITOSAMENTE")
+
+        except Exception as e:
+            logger.error(f"❌ ERROR cargando módulo décimos: {str(e)}")
+            logger.error(f"💥 Tipo de error: {type(e).__name__}")
+            import traceback
+            logger.error(f"📋 Traceback completo:\n{traceback.format_exc()}")
+            messagebox.showerror("Error", f"Error cargando módulo décimos: {str(e)}")
 
     def show_vacaciones_module(self):
         """Mostrar modulo de vacaciones"""
-        self.clear_content()
-        from gui.modules.vacaciones_complete import VacacionesCompleteModule
-        module = VacacionesCompleteModule(self.content_area)
-        self.status_label.config(text="Modulo Vacaciones - Solicitudes y saldos")
+        logger.info("🚀 INICIANDO carga del módulo VACACIONES")
+        try:
+            logger.info("🧹 Limpiando área de contenido...")
+            self.clear_content()
+            logger.info("✅ Área de contenido limpiada correctamente")
+
+            logger.info("📦 Importando VacacionesCompleteModule...")
+            from gui.modules.vacaciones_complete import VacacionesCompleteModule
+            logger.info("✅ Módulo VacacionesCompleteModule importado correctamente")
+
+            logger.info("🏗️ Creando instancia del módulo vacaciones...")
+            module = VacacionesCompleteModule(self.content_area)
+            logger.info("✅ Instancia del módulo vacaciones creada correctamente")
+
+            logger.info("📝 Actualizando status label...")
+            self.status_label.config(text="Modulo Vacaciones - Solicitudes y saldos")
+            logger.info("🎉 MÓDULO VACACIONES CARGADO EXITOSAMENTE")
+
+        except Exception as e:
+            logger.error(f"❌ ERROR cargando módulo vacaciones: {str(e)}")
+            logger.error(f"💥 Tipo de error: {type(e).__name__}")
+            import traceback
+            logger.error(f"📋 Traceback completo:\n{traceback.format_exc()}")
+            messagebox.showerror("Error", f"Error cargando módulo vacaciones: {str(e)}")
 
     def show_liquidaciones_module(self):
         """Mostrar modulo de liquidaciones"""
-        self.clear_content()
-        from gui.modules.liquidaciones_complete import LiquidacionesCompleteModule
-        module = LiquidacionesCompleteModule(self.content_area)
-        self.status_label.config(text="Modulo Liquidaciones - Calculo de finiquitos")
+        logger.info("🚀 INICIANDO carga del módulo LIQUIDACIONES")
+        try:
+            logger.info("🧹 Limpiando área de contenido...")
+            self.clear_content()
+            logger.info("✅ Área de contenido limpiada correctamente")
+
+            logger.info("📦 Importando LiquidacionesCompleteModule...")
+            from gui.modules.liquidaciones_complete import LiquidacionesCompleteModule
+            logger.info("✅ Módulo LiquidacionesCompleteModule importado correctamente")
+
+            logger.info("🏗️ Creando instancia del módulo liquidaciones...")
+            module = LiquidacionesCompleteModule(self.content_area)
+            logger.info("✅ Instancia del módulo liquidaciones creada correctamente")
+
+            logger.info("📝 Actualizando status label...")
+            self.status_label.config(text="Modulo Liquidaciones - Calculo de finiquitos")
+            logger.info("🎉 MÓDULO LIQUIDACIONES CARGADO EXITOSAMENTE")
+
+        except Exception as e:
+            logger.error(f"❌ ERROR cargando módulo liquidaciones: {str(e)}")
+            logger.error(f"💥 Tipo de error: {type(e).__name__}")
+            import traceback
+            logger.error(f"📋 Traceback completo:\n{traceback.format_exc()}")
+            messagebox.showerror("Error", f"Error cargando módulo liquidaciones: {str(e)}")
 
     def show_prestamos_module(self):
         """Mostrar modulo de prestamos"""
-        self.clear_content()
-        from gui.modules.prestamos_complete import PrestamosCompleteModule
-        module = PrestamosCompleteModule(self.content_area)
-        self.status_label.config(text="Modulo Prestamos - Prestamos y anticipos")
+        logger.info("🚀 INICIANDO carga del módulo PRÉSTAMOS")
+        try:
+            logger.info("🧹 Limpiando área de contenido...")
+            self.clear_content()
+            logger.info("✅ Área de contenido limpiada correctamente")
+
+            logger.info("📦 Importando PrestamosCompleteModule...")
+            from gui.modules.prestamos_complete import PrestamosCompleteModule
+            logger.info("✅ Módulo PrestamosCompleteModule importado correctamente")
+
+            logger.info("🏗️ Creando instancia del módulo préstamos...")
+            module = PrestamosCompleteModule(self.content_area)
+            logger.info("✅ Instancia del módulo préstamos creada correctamente")
+
+            logger.info("📝 Actualizando status label...")
+            self.status_label.config(text="Modulo Prestamos - Prestamos y anticipos")
+            logger.info("🎉 MÓDULO PRÉSTAMOS CARGADO EXITOSAMENTE")
+
+        except Exception as e:
+            logger.error(f"❌ ERROR cargando módulo préstamos: {str(e)}")
+            logger.error(f"💥 Tipo de error: {type(e).__name__}")
+            import traceback
+            logger.error(f"📋 Traceback completo:\n{traceback.format_exc()}")
+            messagebox.showerror("Error", f"Error cargando módulo préstamos: {str(e)}")
 
     def show_egresos_module(self):
         """Mostrar modulo de egresos e ingresos"""
-        self.clear_content()
-        from gui.modules.egresos_ingresos_complete import EgresosIngresosCompleteModule
-        module = EgresosIngresosCompleteModule(self.content_area)
-        self.status_label.config(text="Modulo Egresos-Ingresos - Descuentos y bonificaciones")
+        logger.info("🚀 INICIANDO carga del módulo EGRESOS-INGRESOS")
+        try:
+            logger.info("🧹 Limpiando área de contenido...")
+            self.clear_content()
+            logger.info("✅ Área de contenido limpiada correctamente")
+
+            logger.info("📦 Importando EgresosIngresosCompleteModule...")
+            from gui.modules.egresos_ingresos_complete import EgresosIngresosCompleteModule
+            logger.info("✅ Módulo EgresosIngresosCompleteModule importado correctamente")
+
+            logger.info("🏗️ Creando instancia del módulo egresos-ingresos...")
+            module = EgresosIngresosCompleteModule(self.content_area)
+            logger.info("✅ Instancia del módulo egresos-ingresos creada correctamente")
+
+            logger.info("📝 Actualizando status label...")
+            self.status_label.config(text="Modulo Egresos-Ingresos - Descuentos y bonificaciones")
+            logger.info("🎉 MÓDULO EGRESOS-INGRESOS CARGADO EXITOSAMENTE")
+
+        except Exception as e:
+            logger.error(f"❌ ERROR cargando módulo egresos-ingresos: {str(e)}")
+            logger.error(f"💥 Tipo de error: {type(e).__name__}")
+            import traceback
+            logger.error(f"📋 Traceback completo:\n{traceback.format_exc()}")
+            messagebox.showerror("Error", f"Error cargando módulo egresos-ingresos: {str(e)}")
 
     def show_dotacion_module(self):
         """Mostrar modulo de dotacion"""
-        self.clear_content()
-        from gui.modules.dotacion_complete import DotacionCompleteModule
-        module = DotacionCompleteModule(self.content_area)
-        self.status_label.config(text="Modulo Dotacion - Control de uniformes y equipos")
+        logger.info("🚀 INICIANDO carga del módulo DOTACIÓN")
+        try:
+            logger.info("🧹 Limpiando área de contenido...")
+            self.clear_content()
+            logger.info("✅ Área de contenido limpiada correctamente")
+
+            logger.info("📦 Importando DotacionCompleteModule...")
+            from gui.modules.dotacion_complete import DotacionCompleteModule
+            logger.info("✅ Módulo DotacionCompleteModule importado correctamente")
+
+            logger.info("🏗️ Creando instancia del módulo dotación...")
+            module = DotacionCompleteModule(self.content_area)
+            logger.info("✅ Instancia del módulo dotación creada correctamente")
+
+            logger.info("📝 Actualizando status label...")
+            self.status_label.config(text="Modulo Dotacion - Control de uniformes y equipos")
+            logger.info("🎉 MÓDULO DOTACIÓN CARGADO EXITOSAMENTE")
+
+        except Exception as e:
+            logger.error(f"❌ ERROR cargando módulo dotación: {str(e)}")
+            logger.error(f"💥 Tipo de error: {type(e).__name__}")
+            import traceback
+            logger.error(f"📋 Traceback completo:\n{traceback.format_exc()}")
+            messagebox.showerror("Error", f"Error cargando módulo dotación: {str(e)}")
 
     def show_reportes_module(self):
         """Mostrar modulo de reportes"""
