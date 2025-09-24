@@ -78,16 +78,16 @@ def main():
             screen_width = root.winfo_screenwidth()
             screen_height = root.winfo_screenheight()
 
-            # Calcular tamaño óptimo (80% de pantalla)
-            window_width = min(1400, int(screen_width * 0.8))
-            window_height = min(900, int(screen_height * 0.8))
+            # Calcular tamaño más compacto pero funcional
+            window_width = min(1200, int(screen_width * 0.75))
+            window_height = min(800, int(screen_height * 0.8))
 
             # Centrar ventana
             x = (screen_width - window_width) // 2
             y = (screen_height - window_height) // 2
 
             root.geometry(f"{window_width}x{window_height}+{x}+{y}")
-            root.minsize(1000, 700)  # Tamaño mínimo
+            root.minsize(600, 400)  # Tamaño mínimo más pequeño
             root.configure(bg=Config.COLORS['background'])
 
             # Hacer redimensionable
@@ -315,7 +315,7 @@ class SAICompleteApp:
             self.main_frame,
             bg=self.config.COLORS['background']
         )
-        container.pack(fill="both", expand=True, padx=20, pady=20)
+        container.pack(fill="both", expand=True, padx=15, pady=15)
 
         # Grid layout
         container.grid_columnconfigure(1, weight=1)
@@ -373,7 +373,7 @@ class SAICompleteApp:
         sidebar_frame = tk.Frame(
             parent,
             bg='white',
-            width=280,
+            width=250,
             relief='raised',
             bd=1
         )
@@ -602,7 +602,7 @@ class SAICompleteApp:
 
         # Frame del dashboard
         dashboard_frame = tk.Frame(self.content_area, bg='white')
-        dashboard_frame.pack(fill="both", expand=True, padx=25, pady=25)
+        dashboard_frame.pack(fill="both", expand=True, padx=15, pady=15)
 
         # Header
         header_frame = tk.Frame(dashboard_frame, bg='white')
@@ -659,14 +659,14 @@ class SAICompleteApp:
             bg=color,
             relief='raised',
             bd=2,
-            width=200,
-            height=120
+            width=180,
+            height=100
         )
         card_frame.grid_propagate(False)
 
         # Header con icono
         header_frame = tk.Frame(card_frame, bg=color)
-        header_frame.pack(fill="x", padx=15, pady=(15, 5))
+        header_frame.pack(fill="x", padx=12, pady=(12, 3))
 
         icon_label = tk.Label(
             header_frame,
@@ -690,7 +690,7 @@ class SAICompleteApp:
         value_label = tk.Label(
             card_frame,
             text=str(value),
-            font=('Arial', 24, 'bold'),
+            font=('Arial', 20, 'bold'),
             bg=color,
             fg='white'
         )
@@ -705,7 +705,7 @@ class SAICompleteApp:
                 bg=color,
                 fg='lightgray'
             )
-            subtitle_label.pack(pady=(0, 15))
+            subtitle_label.pack(pady=(0, 10))
 
         return card_frame
 
