@@ -8,6 +8,7 @@ Servicios de lógica de negocio
 from .payroll_calculator import PayrollCalculator, payroll_calculator
 from .decimos_calculator import DecimosCalculator, decimos_calculator
 from .vacation_calculator import VacationCalculator, vacation_calculator
+from .liquidation_calculator import LiquidationCalculator, liquidation_calculator
 
 __all__ = [
     'PayrollCalculator',
@@ -15,5 +16,7 @@ __all__ = [
     'DecimosCalculator',
     'decimos_calculator',
     'VacationCalculator',
-    'vacation_calculator'
+    'vacation_calculator',
+    'LiquidationCalculator',
+    'liquidation_calculator'
 ]
