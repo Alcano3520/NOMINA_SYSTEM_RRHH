@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Módulo de Clientes - Sistema SAI
+Módulo de Clientes - Sistema SGN
 """
 
 import tkinter as tk

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Módulo de RPCONTRL - Sistema SAI
+Módulo de RPCONTRL - Sistema SGN
 """
 
 import tkinter as tk

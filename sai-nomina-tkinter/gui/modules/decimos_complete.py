@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Módulo de Décimos Completo - Sistema SAI
+Módulo de Décimos Completo - Sistema SGN
 Gestión de décimo tercero y décimo cuarto sueldo según normativa ecuatoriana
 """
 

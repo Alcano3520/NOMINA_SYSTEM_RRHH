@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Módulo de Reportes Completo - Sistema SAI
+Módulo de Reportes Completo - Sistema SGN
 Generación de reportes del sistema de nómina y RRHH
 """
 
@@ -652,7 +652,7 @@ class ReportesCompleteModule(tk.Frame):
     def load_sample_preview(self):
         """Cargar vista previa de ejemplo"""
         sample_preview = """
-SISTEMA SAI - REPORTE DE NÓMINA
+SISTEMA SGN - REPORTE DE NÓMINA
 INSEVIG CIA. LTDA.
 Período: Enero 2024
 
@@ -666,7 +666,7 @@ CÓDIGO    EMPLEADO                DEPARTAMENTO       SUELDO    NETO
 TOTALES:                                            5400.00   4674.85
 
 Generado: {fecha}
-Usuario: Sistema SAI
+Usuario: Sistema SGN
         """.format(fecha=datetime.now().strftime('%d/%m/%Y %H:%M'))
 
         self.preview_text.insert(tk.END, sample_preview)

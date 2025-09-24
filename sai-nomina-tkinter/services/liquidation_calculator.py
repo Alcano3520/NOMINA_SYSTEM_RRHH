@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-LiquidationCalculator - Sistema SAI
+LiquidationCalculator - Sistema SGN
 Cálculo de liquidaciones y finiquitos según normativa ecuatoriana 2024
 """
 

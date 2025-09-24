@@ -15,7 +15,7 @@ class Config:
     DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
 
     # Aplicación
-    APP_NAME = "SAI - Sistema Administrativo Integral"
+    APP_NAME = "Sistema de Gestión de Nómina (SGN)"
     APP_VERSION = "1.0.0"
     COMPANY_NAME = "INSEVIG CIA. LTDA."
 

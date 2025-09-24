@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Componente de Exportación de Base de Datos - Sistema SAI
+Componente de Exportación de Base de Datos - Sistema SGN
 Utilidad para exportar toda la base de datos o tablas específicas
 """
 
@@ -37,7 +37,7 @@ class DatabaseExportDialog(tk.Toplevel):
 
     def setup_window(self):
         """Configurar ventana"""
-        self.title("Exportar Base de Datos - Sistema SAI")
+        self.title("Exportar Base de Datos - Sistema SGN")
         self.geometry("600x500")
         self.resizable(False, False)
         self.transient(self.parent)
@@ -400,7 +400,7 @@ class DatabaseExportDialog(tk.Toplevel):
             file_path = str(Path(file_path).parent / f"{base_name}_{timestamp}{extension}")
 
         with open(file_path, 'w', encoding='utf-8') as f:
-            f.write("-- Exportación de Base de Datos - Sistema SAI\n")
+            f.write("-- Exportación de Base de Datos - Sistema SGN\n")
             f.write(f"-- Generado el: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
 
             for i, table_name in enumerate(table_names):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Modulo de Empleados Completo - Sistema SAI
+Modulo de Empleados Completo - Sistema SGN
 Basado en SISTEMA GESTION EMPLEADO.py e interfaz HTML
 """
 

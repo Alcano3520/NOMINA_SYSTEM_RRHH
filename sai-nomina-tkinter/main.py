@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-SAI - Sistema Administrativo Integral
+SGN - Sistema de Gestión de Nómina
 Sistema de Nómina y RRHH para Ecuador
 """
 
@@ -28,7 +28,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(f'logs/sai_{datetime.now().strftime("%Y%m%d")}.log', encoding='utf-8'),
+        logging.FileHandler(f'logs/sgn_{datetime.now().strftime("%Y%m%d")}.log', encoding='utf-8'),
         logging.StreamHandler()
     ]
 )
@@ -87,7 +87,7 @@ def check_requirements():
 
 def main():
     """Función principal"""
-    logger.info("Iniciando SAI - Sistema Administrativo Integral")
+    logger.info("Iniciando SGN - Sistema de Gestión de Nómina")
 
     try:
         # Verificar requisitos
@@ -109,7 +109,7 @@ def main():
         # Crear ventana principal
         logger.info("Creando ventana principal...")
         root = tk.Tk()
-        root.title("SAI - Sistema Administrativo Integral")
+        root.title("SGN - Sistema de Gestión de Nómina")
         root.geometry("1200x800")
         logger.info("[OK] Ventana principal creada")
 

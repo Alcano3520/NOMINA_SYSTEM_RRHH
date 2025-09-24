@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Módulo de RPHISTOR - Sistema SAI
+Módulo de RPHISTOR - Sistema SGN
 """
 
 import tkinter as tk

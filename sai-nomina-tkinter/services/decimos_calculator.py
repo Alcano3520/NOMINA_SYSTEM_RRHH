@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-DecimosCalculator - Sistema SAI
+DecimosCalculator - Sistema SGN
 Cálculo de décimos tercero y cuarto según normativa ecuatoriana 2024
 """
 

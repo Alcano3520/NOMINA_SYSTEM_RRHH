@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Módulo de RPEMPLEA - Sistema SAI
+Módulo de RPEMPLEA - Sistema SGN
 """
 
 import tkinter as tk

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-SAI - Sistema Administrativo Integral (Version Simple)
+SGN - Sistema de Gestión de Nómina (Version Simple)
 Sistema de Nomina y RRHH para Ecuador
 """
 
@@ -47,7 +47,7 @@ def check_basic_requirements():
 
 def main():
     """Funcion principal"""
-    print("Iniciando SAI - Sistema Administrativo Integral")
+    print("Iniciando SGN - Sistema de Gestión de Nómina")
 
     try:
         # Verificar requisitos
@@ -72,7 +72,7 @@ def main():
         root.configure(bg=Config.COLORS['background'])
 
         # Crear aplicacion
-        app = SAIApp(root)
+        app = SGNApp(root)
 
         # Centrar ventana
         root.update_idletasks()
@@ -86,8 +86,8 @@ def main():
 
         # Mostrar mensaje de exito
         messagebox.showinfo(
-            "SAI Iniciado",
-            "Sistema SAI iniciado correctamente!\\n\\n"
+            "SGN Iniciado",
+            "Sistema SGN iniciado correctamente!\\n\\n"
             "Base de datos: OK\\n"
             "Interfaz: OK\\n"
             "Modulos: OK\\n\\n"
@@ -106,8 +106,8 @@ def main():
             pass
         sys.exit(1)
 
-class SAIApp:
-    """Aplicacion principal del Sistema SAI"""
+class SGNApp:
+    """Aplicacion principal del Sistema SGN"""
 
     def __init__(self, root):
         self.root = root
@@ -208,7 +208,7 @@ class SAIApp:
         # Titulo de bienvenida
         title_label = tk.Label(
             welcome_frame,
-            text="Bienvenido al Sistema SAI",
+            text="Bienvenido al Sistema SGN",
             font=('Arial', 24, 'bold'),
             bg=self.config.COLORS['surface'],
             fg=self.config.COLORS['secondary']
@@ -218,7 +218,7 @@ class SAIApp:
         # Descripcion
         desc_label = tk.Label(
             welcome_frame,
-            text="Sistema Administrativo Integral\\n"
+            text="Sistema de Gestión de Nómina\\n"
                  "Gestion de Nomina y Recursos Humanos\\n"
                  "Desarrollado para " + self.config.COMPANY_NAME,
             font=('Arial', 12),

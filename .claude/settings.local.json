@@ -15,7 +15,13 @@
       "Bash(python:*)",
       "Bash(timeout:*)",
       "Bash(find:*)",
-      "Bash(awk:*)"
+      "Bash(awk:*)",
+      "Bash(for:*)",
+      "Bash(do if [ -f \"$file\" ])",
+      "Bash(then sed -i 's/Sistema SAI/Sistema SGN/g' \"$file\")",
+      "Bash(echo:*)",
+      "Bash(fi)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-AuthManager - Sistema SAI
+AuthManager - Sistema SGN
 Gestión completa de autenticación de usuarios
 """
 
@@ -115,7 +115,7 @@ class AuthManager:
                 token_sesion=token,
                 fecha_expiracion=expiracion,
                 ip_address="127.0.0.1",  # Para aplicación desktop
-                user_agent="SAI Desktop App",
+                user_agent="SGN Desktop App",
                 activa=True
             )
 

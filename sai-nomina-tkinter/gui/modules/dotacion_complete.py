@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Módulo de Dotación Completo - Sistema SAI
+Módulo de Dotación Completo - Sistema SGN
 Gestión de elementos de dotación y uniformes para empleados
 """
 

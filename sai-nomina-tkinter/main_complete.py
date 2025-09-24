@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-SAI - Sistema Administrativo Integral COMPLETO
+SGN - Sistema de Gestión de Nómina COMPLETO
 Sistema de Nomina y RRHH para Ecuador
 Basado en sai_sistema_mejorado_completo.html y SISTEMA GESTION EMPLEADO.py
 """
@@ -44,7 +44,7 @@ def check_requirements():
 
 def main():
     """Funcion principal con sistema de autenticación"""
-    print("=== SAI - Sistema Administrativo Integral COMPLETO ===")
+    print("=== SGN - Sistema de Gestión de Nómina COMPLETO ===")
     print("Version: 2.0.0 - Sistema con autenticación completa")
 
     try:
@@ -104,9 +104,9 @@ def main():
             root.protocol("WM_DELETE_WINDOW", on_main_window_close)
 
             # Crear aplicacion completa
-            app = SAICompleteApp(root, authenticated_user)
+            app = SGNCompleteApp(root, authenticated_user)
 
-            print("[OK] Sistema SAI completo iniciado exitosamente")
+            print("[OK] Sistema SGN completo iniciado exitosamente")
             print("[INFO] Todos los modulos disponibles:")
             print("  - Empleados (Gestion completa)")
             print("  - Nomina (Procesamiento y roles)")
@@ -136,8 +136,8 @@ def main():
         messagebox.showerror("Error Critico", error_msg)
         sys.exit(1)
 
-class SAICompleteApp:
-    """Aplicacion SAI completa con todos los modulos"""
+class SGNCompleteApp:
+    """Aplicacion SGN completa con todos los modulos"""
 
     def __init__(self, root, authenticated_user):
         self.root = root
@@ -205,7 +205,7 @@ class SAICompleteApp:
 
         logo_label = tk.Label(
             logo_frame,
-            text="SAI",
+            text="SGN",
             font=('Arial', 14, 'bold'),
             bg='white',
             fg=self.config.COLORS['secondary']
@@ -218,7 +218,7 @@ class SAICompleteApp:
 
         title_label = tk.Label(
             title_frame,
-            text="Sistema Administrativo Integral",
+            text="Sistema de Gestión de Nómina",
             font=('Arial', 16, 'bold'),
             bg=self.config.COLORS['secondary'],
             fg='white'
@@ -362,7 +362,7 @@ class SAICompleteApp:
                     new_root.configure(bg=self.config.COLORS['background'])
 
                     # Crear nueva aplicación
-                    SAICompleteApp(new_root, user)
+                    SGNCompleteApp(new_root, user)
                     new_root.mainloop()
 
             except Exception as e:
@@ -386,7 +386,7 @@ class SAICompleteApp:
 
         nav_title = tk.Label(
             sidebar_header,
-            text="SISTEMA SAI - NAVEGACIÓN",
+            text="SISTEMA SGN - NAVEGACIÓN",
             font=('Arial', 12, 'bold'),
             bg='white',
             fg=self.config.COLORS['secondary']
@@ -576,7 +576,7 @@ class SAICompleteApp:
 
         self.status_label = tk.Label(
             status_frame,
-            text="Sistema SAI iniciado - Todos los modulos disponibles",
+            text="Sistema SGN iniciado - Todos los modulos disponibles",
             bg=self.config.COLORS['border'],
             fg=self.config.COLORS['text'],
             font=('Arial', 9),
@@ -610,7 +610,7 @@ class SAICompleteApp:
 
         title_label = tk.Label(
             header_frame,
-            text="📊 Dashboard Ejecutivo - Sistema SAI",
+            text="📊 Dashboard Ejecutivo - Sistema SGN",
             font=('Arial', 20, 'bold'),
             bg='white',
             fg=self.config.COLORS['secondary']

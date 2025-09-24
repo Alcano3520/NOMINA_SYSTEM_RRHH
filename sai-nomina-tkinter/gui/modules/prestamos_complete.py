@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Módulo de Préstamos Completo - Sistema SAI
+Módulo de Préstamos Completo - Sistema SGN
 Gestión de préstamos a empleados con cálculo de cuotas e intereses
 """
 

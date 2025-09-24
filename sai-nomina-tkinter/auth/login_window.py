@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-LoginWindow - Sistema SAI
+LoginWindow - Sistema de Gestión de Nómina (SGN)
 Ventana de login principal del sistema
 """
 
@@ -31,7 +31,7 @@ class LoginWindow:
 
     def setup_window(self):
         """Configurar ventana de login"""
-        self.root.title("SAI - Sistema de Nómina Ecuador")
+        self.root.title("SGN - Sistema de Gestión de Nómina Ecuador")
         self.root.geometry("500x600")
         self.root.configure(bg=Config.COLORS['background'])
         self.root.resizable(False, False)
@@ -81,7 +81,7 @@ class LoginWindow:
 
         logo_label = tk.Label(
             logo_frame,
-            text="SAI",
+            text="SGN",
             font=('Arial', 20, 'bold'),
             bg='white',
             fg=Config.COLORS['primary']
@@ -91,7 +91,7 @@ class LoginWindow:
         # Título
         title_label = tk.Label(
             header_frame,
-            text="Sistema Administrativo Integral",
+            text="Sistema de Gestión de Nómina",
             font=('Arial', 16, 'bold'),
             bg=Config.COLORS['primary'],
             fg='white'

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Script para agregar datos de prueba al Sistema SAI
+Script para agregar datos de prueba al Sistema SGN
 """
 
 import sys

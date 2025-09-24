@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Componente de Carga Masiva - Sistema SAI
+Componente de Carga Masiva - Sistema SGN
 Funcionalidades para importación y procesamiento masivo de datos
 """
 

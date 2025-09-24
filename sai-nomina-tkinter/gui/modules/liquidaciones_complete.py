@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Módulo de Liquidaciones Completo - Sistema SAI
+Módulo de Liquidaciones Completo - Sistema SGN
 Gestión de liquidaciones de empleados según normativa ecuatoriana
 """
 

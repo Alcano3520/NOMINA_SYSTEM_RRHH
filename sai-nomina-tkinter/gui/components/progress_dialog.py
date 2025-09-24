@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Componente de Dialogo de Progreso - Sistema SAI
+Componente de Dialogo de Progreso - Sistema SGN
 Dialogo reutilizable para mostrar progreso de operaciones
 """
 

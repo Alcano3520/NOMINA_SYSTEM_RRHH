@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Test completo del Sistema SAI
+Test completo del Sistema SGN
 Validación de todas las funcionalidades principales
 """
 
@@ -24,10 +24,10 @@ from services.vacation_calculator import vacation_calculator
 from services.liquidation_calculator import liquidation_calculator
 
 def test_complete_system():
-    """Prueba completa del sistema SAI"""
+    """Prueba completa del sistema SGN"""
     try:
         print("=" * 50)
-        print("PRUEBA COMPLETA DEL SISTEMA SAI")
+        print("PRUEBA COMPLETA DEL SISTEMA SGN")
         print("=" * 50)
 
         # 1. Verificar empleados en base de datos
@@ -170,7 +170,7 @@ def test_complete_system():
         print("OK Gestión de vacaciones: FUNCIONANDO")
         print("OK Cálculo de liquidaciones: FUNCIONANDO")
         print("OK Base de datos: FUNCIONANDO")
-        print("\n*** SISTEMA SAI 100% FUNCIONAL ***")
+        print("\n*** SISTEMA SGN 100% FUNCIONAL ***")
         print("="*50)
 
         return True

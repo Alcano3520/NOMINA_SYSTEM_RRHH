@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Services Package - Sistema SAI
+Services Package - Sistema SGN
 Servicios de lógica de negocio
 """
 

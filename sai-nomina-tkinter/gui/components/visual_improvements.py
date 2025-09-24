@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Mejoras Visuales - Sistema SAI
+Mejoras Visuales - Sistema SGN
 Componentes para mejorar la experiencia visual del usuario
 """
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-SAI - Sistema Administrativo Integral (Versión Funcional)
+SGN - Sistema de Gestión de Nómina (Versión Funcional)
 Sistema de Nómina y RRHH para Ecuador
 """
 
@@ -82,8 +82,8 @@ def create_working_app():
 
         # Mostrar mensaje de éxito
         messagebox.showinfo(
-            "SAI Iniciado",
-            "Sistema SAI iniciado correctamente!\\n\\n"
+            "SGN Iniciado",
+            "Sistema SGN iniciado correctamente!\\n\\n"
             "[OK] Interfaz moderna cargada\\n"
             "[OK] Base de datos lista\\n"
             "[OK] Modulos basicos disponibles\\n\\n"
@@ -227,7 +227,7 @@ class SimpleMainApp:
         # Título
         title_label = tk.Label(
             welcome_frame,
-            text="¡Bienvenido al Sistema SAI!",
+            text="¡Bienvenido al Sistema SGN!",
             font=self.config.FONTS['heading'],
             bg=self.config.COLORS['surface'],
             fg=self.config.COLORS['secondary']
@@ -237,7 +237,7 @@ class SimpleMainApp:
         # Descripción
         desc_label = tk.Label(
             welcome_frame,
-            text="Sistema Administrativo Integral para gestión de nómina y RRHH\\n"
+            text="Sistema de Gestión de Nómina para gestión de nómina y RRHH\\n"
                  "Seleccione un módulo del menú superior para comenzar",
             font=self.config.FONTS['default'],
             bg=self.config.COLORS['surface'],
@@ -550,7 +550,7 @@ class SimpleMainApp:
 
 def main():
     """Función principal"""
-    print("Iniciando SAI - Sistema Administrativo Integral (Versión Funcional)")
+    print("Iniciando SGN - Sistema de Gestión de Nómina (Versión Funcional)")
 
     try:
         # Verificar requisitos

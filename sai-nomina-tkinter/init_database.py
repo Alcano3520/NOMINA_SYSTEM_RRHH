@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Script para inicializar la base de datos SAI
+Script para inicializar la base de datos SGN
 """
 
 import os

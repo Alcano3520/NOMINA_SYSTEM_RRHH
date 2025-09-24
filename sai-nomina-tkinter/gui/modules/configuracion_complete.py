@@ -1,5 +1,5 @@
 """
-Módulo de Configuración del Sistema SAI
+Módulo de Configuración del Sistema SGN
 Gestión de configuraciones generales, empresa, parámetros y preferencias del sistema
 """
 

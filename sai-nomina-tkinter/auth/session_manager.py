@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-SessionManager - Sistema SAI
+SessionManager - Sistema SGN
 Gestión de sesiones de usuario y timeout automático
 """
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-SAI - Sistema Administrativo Integral (Versión Corregida)
+SGN - Sistema de Gestión de Nómina (Versión Corregida)
 Sistema de Nómina y RRHH para Ecuador
 """
 
@@ -51,7 +51,7 @@ def check_basic_requirements():
 
 def main():
     """Función principal"""
-    print("Iniciando SAI - Sistema Administrativo Integral")
+    print("Iniciando SGN - Sistema de Gestión de Nómina")
 
     try:
         # Verificar requisitos básicos
@@ -66,7 +66,7 @@ def main():
 
         # Crear ventana principal
         root = tk.Tk()
-        root.title("SAI - Sistema Administrativo Integral")
+        root.title("SGN - Sistema de Gestión de Nómina")
         root.geometry("1200x800")
 
         # Configurar estilos
@@ -85,8 +85,8 @@ def main():
 
         # Mostrar mensaje de éxito
         messagebox.showinfo(
-            "SAI Iniciado",
-            "¡Sistema SAI iniciado correctamente!\n\n"
+            "SGN Iniciado",
+            "¡Sistema SGN iniciado correctamente!\n\n"
             "✓ Interfaz moderna cargada\n"
             "✓ Base de datos lista\n"
             "✓ Todos los módulos disponibles\n\n"

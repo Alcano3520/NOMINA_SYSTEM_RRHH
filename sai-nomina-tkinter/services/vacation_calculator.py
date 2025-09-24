@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-VacationCalculator - Sistema SAI
+VacationCalculator - Sistema SGN
 Cálculo de vacaciones según normativa ecuatoriana 2024
 """
 

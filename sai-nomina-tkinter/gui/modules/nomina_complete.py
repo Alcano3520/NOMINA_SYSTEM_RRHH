@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Modulo de Nomina Completo - Sistema SAI
+Modulo de Nomina Completo - Sistema SGN
 Procesamiento de roles de pago segun normativa ecuatoriana
 """
 

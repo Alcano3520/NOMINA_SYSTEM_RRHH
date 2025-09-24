@@ -51,7 +51,7 @@ class Sidebar(tk.Frame):
         # Título
         title_label = tk.Label(
             header_frame,
-            text="SAI System",
+            text="SGN System",
             font=Config.FONTS['subheading'],
             bg=Config.COLORS['secondary'],
             fg='white'

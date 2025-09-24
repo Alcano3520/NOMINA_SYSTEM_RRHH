@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PayrollCalculator - Sistema SAI
+PayrollCalculator - Sistema SGN
 Cálculos de nómina según normativa ecuatoriana 2024
 """
 

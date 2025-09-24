@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Módulo de Autenticación - Sistema SAI
+Módulo de Autenticación - Sistema SGN
 Sistema completo de autenticación y autorización
 """
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Módulo de Turnos - Sistema SAI
+Módulo de Turnos - Sistema SGN
 """
 
 import tkinter as tk

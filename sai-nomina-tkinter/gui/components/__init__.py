@@ -1,1 +1,1 @@
-# Componentes reutilizables del Sistema SAI
+# Componentes reutilizables del Sistema SGN
