@@ -169,7 +169,7 @@ class DecimosCompleteModule(tk.Frame):
         dept_combo.pack(fill=tk.X, pady=2)
 
         # Cargar departamentos
-        departments = ["TODOS"] + [d.nombre for d in self.session.query(Departamento).filter_by(activo=True).all()]
+        departments = ["TODOS"] + [d.nombre_codigo for d in self.session.query(Departamento).filter_by(activo=True).all()]
         dept_combo['values'] = departments
 
         # Panel derecho - Lista de empleados y cálculos

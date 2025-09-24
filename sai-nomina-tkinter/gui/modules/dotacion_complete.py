@@ -681,7 +681,7 @@ class DotacionCompleteModule(tk.Frame):
 
             # Cargar departamentos para reportes
             departamentos = self.session.query(Departamento).filter_by(activo=True).all()
-            dept_values = ["TODOS"] + [dept.nombre for dept in departamentos]
+            dept_values = ["TODOS"] + [dept.nombre_codigo for dept in departamentos]
             self.rep_dept_combo['values'] = dept_values
             self.rep_dept_combo.set("TODOS")
 
@@ -712,7 +712,7 @@ class DotacionCompleteModule(tk.Frame):
                 if empleado.depto:
                     dept = self.session.query(Departamento).filter_by(codigo=empleado.depto).first()
                     if dept:
-                        dept_nombre = dept.nombre
+                        dept_nombre = dept.nombre_codigo
 
                 # Actualizar labels (simular tallas)
                 self.emp_info_labels["Cargo:"].config(text=cargo_nombre)

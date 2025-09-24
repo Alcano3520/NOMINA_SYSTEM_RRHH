@@ -609,7 +609,7 @@ class LiquidacionesCompleteModule(tk.Frame):
 
             # Cargar departamentos para reportes
             departamentos = self.session.query(Departamento).filter_by(activo=True).all()
-            dept_values = ["TODOS"] + [dept.nombre for dept in departamentos]
+            dept_values = ["TODOS"] + [dept.nombre_codigo for dept in departamentos]
             self.rep_dept_combo['values'] = dept_values
             self.rep_dept_combo.set("TODOS")
 
@@ -640,7 +640,7 @@ class LiquidacionesCompleteModule(tk.Frame):
                 if empleado.depto:
                     dept = self.session.query(Departamento).filter_by(codigo=empleado.depto).first()
                     if dept:
-                        dept_nombre = dept.nombre
+                        dept_nombre = dept.nombre_codigo
 
                 # Actualizar labels
                 self.emp_info_labels["Código:"].config(text=empleado.empleado)
@@ -987,7 +987,7 @@ class LiquidacionesCompleteModule(tk.Frame):
 
         # Cargar departamentos
         departamentos = self.session.query(Departamento).filter_by(activo=True).all()
-        dept_values = ["TODOS"] + [dept.nombre for dept in departamentos]
+        dept_values = ["TODOS"] + [dept.nombre_codigo for dept in departamentos]
         self.dept_masivo_combo['values'] = dept_values
         self.dept_masivo_combo.set("TODOS")
 

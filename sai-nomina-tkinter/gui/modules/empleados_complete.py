@@ -718,12 +718,12 @@ class EmpleadosCompleteModule(tk.Frame):
         """Cargar departamentos en combos"""
         try:
             departamentos = self.session.query(Departamento).filter(Departamento.activo == True).all()
-            dept_list = ["Todos"] + [f"{d.codigo} - {d.nombre}" for d in departamentos]
+            dept_list = ["Todos"] + [f"{d.codigo} - {d.nombre_codigo}" for d in departamentos]
 
             self.search_dept_combo['values'] = dept_list
             self.search_dept_combo.set("Todos")
 
-            dept_values = [f"{d.codigo} - {d.nombre}" for d in departamentos]
+            dept_values = [f"{d.codigo} - {d.nombre_codigo}" for d in departamentos]
             self.depto_combo['values'] = dept_values
 
         except Exception as e:

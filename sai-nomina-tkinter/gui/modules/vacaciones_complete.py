@@ -758,7 +758,7 @@ class VacacionesCompleteModule(tk.Frame):
 
         # Cargar departamentos
         departamentos = self.session.query(Departamento).filter_by(activo=True).all()
-        dept_values = ["TODOS"] + [dept.nombre for dept in departamentos]
+        dept_values = ["TODOS"] + [dept.nombre_codigo for dept in departamentos]
         self.dept_saldos_combo['values'] = dept_values
         self.dept_saldos_combo.set("TODOS")
 
