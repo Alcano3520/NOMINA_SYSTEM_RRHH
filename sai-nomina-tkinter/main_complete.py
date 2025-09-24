@@ -62,12 +62,29 @@ def main():
         initialize_database_simple()
         print("[OK] Base de datos inicializada")
 
-        # Crear ventana principal
+        # Crear ventana principal responsive
         root = tk.Tk()
         root.title(f"{Config.APP_NAME} - Sistema Completo")
-        root.geometry("1400x900")
+
+        # Configurar tamaño responsive según resolución
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+
+        # Calcular tamaño óptimo (80% de pantalla)
+        window_width = min(1400, int(screen_width * 0.8))
+        window_height = min(900, int(screen_height * 0.8))
+
+        # Centrar ventana
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+
+        root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        root.minsize(1000, 700)  # Tamaño mínimo
         root.configure(bg=Config.COLORS['background'])
-        root.state('zoomed')  # Maximizar en Windows
+
+        # Hacer redimensionable
+        root.rowconfigure(0, weight=1)
+        root.columnconfigure(0, weight=1)
 
         # Crear aplicacion completa
         app = SAICompleteApp(root)
