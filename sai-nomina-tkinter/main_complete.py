@@ -420,6 +420,7 @@ class SGNCompleteApp:
             ("Dashboard", "dashboard", "🏠", None),  # Dashboard siempre disponible
             ("Empleados", "empleados", "👥", "empleados"),
             ("Nomina", "nomina", "💰", "nomina"),
+            ("Roles de Pago", "roles", "💰", "nomina"),
             ("Decimos", "decimos", "🎁", "decimos"),
             ("Vacaciones", "vacaciones", "✈️", "vacaciones"),
             ("Liquidaciones", "liquidaciones", "🧮", "liquidaciones"),
@@ -866,6 +867,8 @@ class SGNCompleteApp:
                 self.show_empleados_module()
             elif module_name == "nomina":
                 self.show_nomina_module()
+            elif module_name == "roles":
+                self.show_roles_module()
             elif module_name == "decimos":
                 self.show_decimos_module()
             elif module_name == "vacaciones":
@@ -928,6 +931,13 @@ class SGNCompleteApp:
         from gui.modules.nomina_complete import NominaCompleteModule
         module = NominaCompleteModule(self.content_area, self)
         self.status_label.config(text="Modulo Nomina - Procesamiento de roles de pago")
+
+    def show_roles_module(self):
+        """Mostrar modulo de roles de pago"""
+        self.clear_content()
+        from gui.modules.roles_complete import RolesCompleteModule
+        module = RolesCompleteModule(self.content_area, self)
+        self.status_label.config(text="Modulo Roles de Pago - Consulta de roles actuales e histórico")
 
     def show_decimos_module(self):
         """Mostrar modulo de decimos"""
