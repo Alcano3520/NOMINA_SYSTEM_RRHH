@@ -12,7 +12,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from database.connection import DatabaseManager
-from database.models import Base, Empleado, Departamento, Cliente, Cargo, Control
+from database.models import (
+    Base, Empleado, Departamento, Cliente, Cargo, Control,
+    Usuario, Rol, LogAuditoria, SesionUsuario
+)
 from config import Config
 import logging
 

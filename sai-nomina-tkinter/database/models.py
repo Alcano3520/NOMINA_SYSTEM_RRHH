@@ -7,6 +7,8 @@ from sqlalchemy import (
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from datetime import datetime
+import hashlib
+import json
 
 Base = declarative_base()
 
@@ -678,6 +680,128 @@ class AuditoriaAcceso(Base):
     exitoso = Column(Boolean, default=True)
 
     __table_args__ = (
-        Index('idx_auditoria_usuario_fecha', 'usuario', 'fecha_acceso'),
-        Index('idx_auditoria_modulo_accion', 'modulo', 'accion'),
+        Index('idx_acceso_usuario_fecha', 'usuario', 'fecha_acceso'),
+        Index('idx_acceso_modulo_accion', 'modulo', 'accion'),
+    )
+
+class Usuario(Base):
+    """Sistema de usuarios para autenticación"""
+    __tablename__ = "usuarios"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String(50), unique=True, nullable=False)
+    password_hash = Column(String(255), nullable=False)
+    email = Column(String(100))
+    nombres = Column(String(100))
+    apellidos = Column(String(100))
+
+    # Control de acceso
+    activo = Column(Boolean, default=True)
+    ultimo_acceso = Column(DateTime)
+    intentos_fallidos = Column(Integer, default=0)
+    fecha_creacion = Column(DateTime, default=datetime.utcnow)
+    fecha_modificacion = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relación con rol
+    rol_id = Column(Integer, ForeignKey('roles.id'), nullable=False)
+    rol = relationship("Rol", back_populates="usuarios")
+
+    # Relación con empleado (opcional)
+    empleado_codigo = Column(String(6), ForeignKey('rpemplea.empleado'))
+    empleado_rel = relationship("Empleado")
+
+    __table_args__ = (
+        Index('idx_usuario_username', 'username'),
+        Index('idx_usuario_activo', 'activo'),
+    )
+
+    def set_password(self, password):
+        """Establecer contraseña encriptada"""
+        self.password_hash = hashlib.sha256(password.encode()).hexdigest()
+
+    def check_password(self, password):
+        """Verificar contraseña"""
+        return self.password_hash == hashlib.sha256(password.encode()).hexdigest()
+
+    @property
+    def nombre_completo(self):
+        if self.nombres and self.apellidos:
+            return f"{self.nombres} {self.apellidos}"
+        return self.username
+
+class Rol(Base):
+    """Roles de usuario para control de permisos"""
+    __tablename__ = "roles"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    nombre = Column(String(50), unique=True, nullable=False)
+    descripcion = Column(String(200))
+    permisos = Column(Text)  # JSON con permisos por módulo
+    activo = Column(Boolean, default=True)
+    fecha_creacion = Column(DateTime, default=datetime.utcnow)
+
+    # Relación con usuarios
+    usuarios = relationship("Usuario", back_populates="rol")
+
+    def get_permisos(self):
+        """Obtener permisos como diccionario"""
+        if self.permisos:
+            try:
+                return json.loads(self.permisos)
+            except:
+                return {}
+        return {}
+
+    def set_permisos(self, permisos_dict):
+        """Establecer permisos desde diccionario"""
+        self.permisos = json.dumps(permisos_dict)
+
+    def tiene_permiso(self, modulo, accion="read"):
+        """Verificar si el rol tiene permiso específico"""
+        permisos = self.get_permisos()
+        modulo_permisos = permisos.get(modulo, {})
+        return modulo_permisos.get(accion, False)
+
+class LogAuditoria(Base):
+    """Log de auditoría para seguimiento de acciones"""
+    __tablename__ = "log_auditoria"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    usuario = Column(String(50), nullable=False)
+    accion = Column(String(100), nullable=False)
+    modulo = Column(String(50))
+    tabla = Column(String(50))
+    registro_id = Column(String(50))
+    valores_antes = Column(Text)  # JSON
+    valores_despues = Column(Text)  # JSON
+    ip_address = Column(String(15))
+    fecha = Column(DateTime, default=datetime.utcnow, nullable=False)
+    exitosa = Column(Boolean, default=True)
+    detalles = Column(Text)
+
+    __table_args__ = (
+        Index('idx_auditoria_usuario_fecha', 'usuario', 'fecha'),
+        Index('idx_auditoria_modulo_tabla', 'modulo', 'tabla'),
+        Index('idx_auditoria_fecha', 'fecha'),
+    )
+
+class SesionUsuario(Base):
+    """Control de sesiones activas"""
+    __tablename__ = "sesiones_usuario"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    usuario_id = Column(Integer, ForeignKey('usuarios.id'), nullable=False)
+    token_sesion = Column(String(255), unique=True, nullable=False)
+    fecha_inicio = Column(DateTime, default=datetime.utcnow)
+    fecha_expiracion = Column(DateTime, nullable=False)
+    ip_address = Column(String(15))
+    user_agent = Column(String(200))
+    activa = Column(Boolean, default=True)
+
+    # Relación con usuario
+    usuario = relationship("Usuario")
+
+    __table_args__ = (
+        Index('idx_sesion_token', 'token_sesion'),
+        Index('idx_sesion_usuario_activa', 'usuario_id', 'activa'),
     )

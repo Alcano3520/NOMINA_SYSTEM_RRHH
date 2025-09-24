@@ -43,9 +43,9 @@ def check_requirements():
         sys.exit(1)
 
 def main():
-    """Funcion principal"""
+    """Funcion principal con sistema de autenticación"""
     print("=== SAI - Sistema Administrativo Integral COMPLETO ===")
-    print("Version: 2.0.0 - Todos los modulos implementados")
+    print("Version: 2.0.0 - Sistema con autenticación completa")
 
     try:
         check_requirements()
@@ -57,53 +57,78 @@ def main():
         for directory in ['logs', 'reports', 'backups', 'exports']:
             Path(directory).mkdir(exist_ok=True)
 
-        # Inicializar base de datos
-        from database.initialize_simple import initialize_database_simple
-        initialize_database_simple()
-        print("[OK] Base de datos inicializada")
+        # Inicializar base de datos (incluyendo nuevas tablas de autenticación)
+        from init_database import create_database
+        create_database()
+        print("[OK] Base de datos inicializada con sistema de autenticación")
 
-        # Crear ventana principal responsive
-        root = tk.Tk()
-        root.title(f"{Config.APP_NAME} - Sistema Completo")
+        # Importar sistema de autenticación
+        from auth.login_window import show_login_window
+        from auth.auth_manager import auth_manager
 
-        # Configurar tamaño responsive según resolución
-        screen_width = root.winfo_screenwidth()
-        screen_height = root.winfo_screenheight()
+        def on_login_success(authenticated_user):
+            """Callback ejecutado después de login exitoso"""
+            print(f"[OK] Usuario autenticado: {authenticated_user.username}")
 
-        # Calcular tamaño óptimo (80% de pantalla)
-        window_width = min(1400, int(screen_width * 0.8))
-        window_height = min(900, int(screen_height * 0.8))
+            # Crear ventana principal responsive
+            root = tk.Tk()
+            root.title(f"{Config.APP_NAME} - Sistema Completo - Usuario: {authenticated_user.nombre_completo}")
 
-        # Centrar ventana
-        x = (screen_width - window_width) // 2
-        y = (screen_height - window_height) // 2
+            # Configurar tamaño responsive según resolución
+            screen_width = root.winfo_screenwidth()
+            screen_height = root.winfo_screenheight()
 
-        root.geometry(f"{window_width}x{window_height}+{x}+{y}")
-        root.minsize(1000, 700)  # Tamaño mínimo
-        root.configure(bg=Config.COLORS['background'])
+            # Calcular tamaño óptimo (80% de pantalla)
+            window_width = min(1400, int(screen_width * 0.8))
+            window_height = min(900, int(screen_height * 0.8))
 
-        # Hacer redimensionable
-        root.rowconfigure(0, weight=1)
-        root.columnconfigure(0, weight=1)
+            # Centrar ventana
+            x = (screen_width - window_width) // 2
+            y = (screen_height - window_height) // 2
 
-        # Crear aplicacion completa
-        app = SAICompleteApp(root)
+            root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+            root.minsize(1000, 700)  # Tamaño mínimo
+            root.configure(bg=Config.COLORS['background'])
 
-        print("[OK] Sistema SAI completo iniciado exitosamente")
-        print("[INFO] Todos los modulos disponibles:")
-        print("  - Empleados (Gestion completa)")
-        print("  - Nomina (Procesamiento y roles)")
-        print("  - Decimos (13vo y 14vo sueldo)")
-        print("  - Vacaciones (Solicitudes y saldos)")
-        print("  - Liquidaciones (Calculo finiquitos)")
-        print("  - Prestamos (Prestamos y anticipos)")
-        print("  - Egresos-Ingresos (Descuentos adicionales)")
-        print("  - Dotacion (Uniformes y equipos)")
-        print("  - Reportes (PDF y Excel)")
-        print("  - Configuracion (Tablas maestras)")
+            # Hacer redimensionable
+            root.rowconfigure(0, weight=1)
+            root.columnconfigure(0, weight=1)
 
-        # Iniciar aplicacion
-        root.mainloop()
+            # Manejar cierre de ventana
+            def on_main_window_close():
+                if messagebox.askokcancel("Salir", "¿Está seguro de cerrar el sistema?"):
+                    # Hacer logout
+                    auth_manager.logout()
+                    root.destroy()
+
+            root.protocol("WM_DELETE_WINDOW", on_main_window_close)
+
+            # Crear aplicacion completa
+            app = SAICompleteApp(root, authenticated_user)
+
+            print("[OK] Sistema SAI completo iniciado exitosamente")
+            print("[INFO] Todos los modulos disponibles:")
+            print("  - Empleados (Gestion completa)")
+            print("  - Nomina (Procesamiento y roles)")
+            print("  - Decimos (13vo y 14vo sueldo)")
+            print("  - Vacaciones (Solicitudes y saldos)")
+            print("  - Liquidaciones (Calculo finiquitos)")
+            print("  - Prestamos (Prestamos y anticipos)")
+            print("  - Egresos-Ingresos (Descuentos adicionales)")
+            print("  - Dotacion (Uniformes y equipos)")
+            print("  - Reportes (PDF y Excel)")
+            print("  - Configuracion (Tablas maestras)")
+
+            # Iniciar aplicacion
+            root.mainloop()
+
+        # Mostrar ventana de login
+        print("[INFO] Mostrando ventana de login...")
+        success, user = show_login_window(on_login_success)
+
+        if not success:
+            print("[INFO] Login cancelado por usuario")
+            return
 
     except Exception as e:
         error_msg = f"Error critico: {str(e)}"
@@ -114,14 +139,19 @@ def main():
 class SAICompleteApp:
     """Aplicacion SAI completa con todos los modulos"""
 
-    def __init__(self, root):
+    def __init__(self, root, authenticated_user):
         self.root = root
         self.current_module = None
         self.current_employee = None
+        self.current_user = authenticated_user  # Usuario autenticado
 
         # Importar configuracion
         from config import Config
         self.config = Config
+
+        # Importar sistema de permisos
+        from auth.permissions import permission_manager
+        self.permission_manager = permission_manager
 
         # Variables de control
         self.data_modified = False
@@ -221,9 +251,11 @@ class SAICompleteApp:
         avatar_frame.pack(side="left", padx=(15, 10))
         avatar_frame.pack_propagate(False)
 
+        # Avatar con iniciales del usuario
+        initials = ''.join([n[0].upper() for n in self.current_user.nombre_completo.split()[:2]])
         avatar_label = tk.Label(
             avatar_frame,
-            text="U",
+            text=initials,
             font=('Arial', 12, 'bold'),
             bg='white',
             fg=self.config.COLORS['secondary']
@@ -236,12 +268,22 @@ class SAICompleteApp:
 
         user_name_label = tk.Label(
             user_info_frame,
-            text="Administrador",
+            text=self.current_user.nombre_completo,
             font=('Arial', 11, 'bold'),
             bg=self.config.COLORS['secondary'],
             fg='white'
         )
         user_name_label.pack(anchor="e")
+
+        # Rol del usuario
+        role_label = tk.Label(
+            user_info_frame,
+            text=f"({self.current_user.rol.nombre})",
+            font=('Arial', 8),
+            bg=self.config.COLORS['secondary'],
+            fg='lightgray'
+        )
+        role_label.pack(anchor="e")
 
         date_label = tk.Label(
             user_info_frame,
@@ -251,6 +293,21 @@ class SAICompleteApp:
             fg='lightgray'
         )
         date_label.pack(anchor="e")
+
+        # Botón logout
+        logout_btn = tk.Button(
+            right_frame,
+            text="Cerrar Sesión",
+            command=self.logout,
+            bg=self.config.COLORS['danger'],
+            fg='white',
+            font=('Arial', 9),
+            relief=tk.FLAT,
+            padx=10,
+            pady=5,
+            cursor='hand2'
+        )
+        logout_btn.pack(side="right", padx=(10, 0))
 
     def create_main_container(self):
         """Crear container principal con sidebar y contenido"""
@@ -269,6 +326,47 @@ class SAICompleteApp:
 
         # Area de contenido
         self.create_content_area(container)
+
+    def logout(self):
+        """Cerrar sesión del usuario"""
+        if messagebox.askokcancel("Cerrar Sesión",
+                                 f"¿Está seguro de cerrar la sesión de {self.current_user.nombre_completo}?"):
+            try:
+                # Importar auth_manager
+                from auth.auth_manager import auth_manager
+
+                # Hacer logout
+                auth_manager.logout()
+
+                # Cerrar ventana principal
+                self.root.destroy()
+
+                # Mostrar ventana de login nuevamente
+                from auth.login_window import show_login_window
+                success, user = show_login_window()
+
+                if success:
+                    # Crear nueva instancia de la aplicación
+                    new_root = tk.Tk()
+                    new_root.title(f"{self.config.APP_NAME} - Sistema Completo - Usuario: {user.nombre_completo}")
+
+                    # Configurar ventana igual que antes
+                    screen_width = new_root.winfo_screenwidth()
+                    screen_height = new_root.winfo_screenheight()
+                    window_width = min(1400, int(screen_width * 0.8))
+                    window_height = min(900, int(screen_height * 0.8))
+                    x = (screen_width - window_width) // 2
+                    y = (screen_height - window_height) // 2
+                    new_root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+                    new_root.minsize(1000, 700)
+                    new_root.configure(bg=self.config.COLORS['background'])
+
+                    # Crear nueva aplicación
+                    SAICompleteApp(new_root, user)
+                    new_root.mainloop()
+
+            except Exception as e:
+                messagebox.showerror("Error", f"Error al cerrar sesión: {str(e)}")
 
     def create_sidebar(self, parent):
         """Crear sidebar con navegacion"""
@@ -317,51 +415,64 @@ class SAICompleteApp:
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
 
-        # Menu principal
-        self.create_nav_menu(scrollable_frame, "MODULOS PRINCIPALES", [
-            ("Dashboard", "dashboard", "🏠"),
-            ("Empleados", "empleados", "👥"),
-            ("Nomina", "nomina", "💰"),
-            ("Decimos", "decimos", "🎁"),
-            ("Vacaciones", "vacaciones", "✈️"),
-            ("Liquidaciones", "liquidaciones", "🧮"),
-            ("Prestamos", "prestamos", "💳"),
-            ("Egresos-Ingresos", "egresos", "💸"),
-            ("Dotacion", "dotacion", "📦"),
-            ("Reportes", "reportes", "📊")
+        # Menu principal (filtrado por permisos)
+        main_menu_items = self.get_filtered_menu_items("MODULOS PRINCIPALES", [
+            ("Dashboard", "dashboard", "🏠", None),  # Dashboard siempre disponible
+            ("Empleados", "empleados", "👥", "empleados"),
+            ("Nomina", "nomina", "💰", "nomina"),
+            ("Decimos", "decimos", "🎁", "decimos"),
+            ("Vacaciones", "vacaciones", "✈️", "vacaciones"),
+            ("Liquidaciones", "liquidaciones", "🧮", "liquidaciones"),
+            ("Prestamos", "prestamos", "💳", "prestamos"),
+            ("Egresos-Ingresos", "egresos", "💸", "nomina"),
+            ("Dotacion", "dotacion", "📦", "empleados"),
+            ("Reportes", "reportes", "📊", "reportes")
         ])
+        if main_menu_items:
+            self.create_nav_menu(scrollable_frame, "MODULOS PRINCIPALES", main_menu_items)
 
-        # Separador
-        separator2 = tk.Frame(scrollable_frame, bg=self.config.COLORS['border'], height=1)
-        separator2.pack(fill="x", padx=20, pady=10)
 
-        # Menu configuracion
-        self.create_nav_menu(scrollable_frame, "CONFIGURACION", [
-            ("Departamentos", "departamentos", "🏢"),
-            ("Turnos", "turnos", "🕐"),
-            ("Equipos", "equipos", "⛑️"),
-            ("Clientes", "clientes", "🤝"),
+        # Menu configuracion (filtrado por permisos)
+        config_menu_items = self.get_filtered_menu_items("CONFIGURACION", [
+            ("Departamentos", "departamentos", "🏢", "departamentos"),
+            ("Turnos", "turnos", "🕐", "configuracion"),
+            ("Equipos", "equipos", "⛑️", "configuracion"),
+            ("Clientes", "clientes", "🤝", "configuracion"),
         ])
+        if config_menu_items:
+            # Separador solo si hay items anteriores y actuales
+            if main_menu_items:
+                separator2 = tk.Frame(scrollable_frame, bg=self.config.COLORS['border'], height=1)
+                separator2.pack(fill="x", padx=20, pady=10)
+            self.create_nav_menu(scrollable_frame, "CONFIGURACION", config_menu_items)
 
-        # Separador
-        separator3 = tk.Frame(scrollable_frame, bg=self.config.COLORS['border'], height=1)
-        separator3.pack(fill="x", padx=20, pady=10)
 
-        # Menu base de datos
-        self.create_nav_menu(scrollable_frame, "BASE DE DATOS", [
-            ("RPEMPLEA", "rpemplea", "📋"),
-            ("RPHISTOR", "rphistor", "📚"),
-            ("RPCONTRL", "rpcontrl", "⚙️"),
+        # Menu base de datos (filtrado por permisos)
+        db_menu_items = self.get_filtered_menu_items("BASE DE DATOS", [
+            ("RPEMPLEA", "rpemplea", "📋", "empleados"),
+            ("RPHISTOR", "rphistor", "📚", "auditoria"),
+            ("RPCONTRL", "rpcontrl", "⚙️", "configuracion"),
         ])
+        if db_menu_items:
+            # Separador solo si hay items anteriores
+            if main_menu_items or config_menu_items:
+                separator3 = tk.Frame(scrollable_frame, bg=self.config.COLORS['border'], height=1)
+                separator3.pack(fill="x", padx=20, pady=10)
+            self.create_nav_menu(scrollable_frame, "BASE DE DATOS", db_menu_items)
 
-        # Separador
-        separator4 = tk.Frame(scrollable_frame, bg=self.config.COLORS['border'], height=1)
-        separator4.pack(fill="x", padx=20, pady=10)
 
-        # Menu administración
-        self.create_nav_menu(scrollable_frame, "ADMINISTRACIÓN", [
-            ("Configuración", "configuracion", "⚙️"),
+        # Menu administración (filtrado por permisos)
+        admin_menu_items = self.get_filtered_menu_items("ADMINISTRACIÓN", [
+            ("Usuarios", "usuarios", "👤", "usuarios"),
+            ("Auditoría", "auditoria", "🔍", "auditoria"),
+            ("Configuración", "configuracion", "⚙️", "configuracion"),
         ])
+        if admin_menu_items:
+            # Separador solo si hay items anteriores
+            if main_menu_items or config_menu_items or db_menu_items:
+                separator4 = tk.Frame(scrollable_frame, bg=self.config.COLORS['border'], height=1)
+                separator4.pack(fill="x", padx=20, pady=10)
+            self.create_nav_menu(scrollable_frame, "ADMINISTRACIÓN", admin_menu_items)
 
         # Pack canvas y scrollbar
         canvas.pack(side="left", fill="both", expand=True, padx=(0, 5))
@@ -372,6 +483,26 @@ class SAICompleteApp:
             canvas.yview_scroll(int(-1*(event.delta/120)), "units")
 
         canvas.bind_all("<MouseWheel>", _on_mousewheel)
+
+    def get_filtered_menu_items(self, section_name, items):
+        """Filtrar items del menú basado en permisos del usuario"""
+        filtered_items = []
+
+        for item in items:
+            if len(item) == 4:  # (text, module, icon, permission_module)
+                text, module, icon, permission_module = item
+
+                # Si no requiere permisos específicos (None), siempre mostrar
+                if permission_module is None:
+                    filtered_items.append((text, module, icon))
+                # Si el usuario tiene permisos para el módulo, mostrar
+                elif self.permission_manager.check_permission(self.current_user, permission_module, "read"):
+                    filtered_items.append((text, module, icon))
+            else:
+                # Formato anterior sin permisos
+                filtered_items.append(item)
+
+        return filtered_items
 
     def create_nav_menu(self, parent, title, items):
         """Crear menu de navegacion"""
