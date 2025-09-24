@@ -16,7 +16,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from database.connection import get_session
-from database.models import Empleado, Departamento, Cargo
+from database.models import Empleado, Departamento, Cargo, DecimoTercer, DecimoCuarto
+from services.decimos_calculator import decimos_calculator
 
 class DecimosCompleteModule(tk.Frame):
     """Módulo completo de décimos"""
@@ -448,38 +449,117 @@ class DecimosCompleteModule(tk.Frame):
             messagebox.showerror("Error", f"Error calculando décimo: {str(e)}")
 
     def calculate_decimos(self):
-        """Calcular décimos para todos los empleados"""
+        """Calcular décimos para todos los empleados usando DecimosCalculator"""
         try:
+            # Obtener parámetros de cálculo
+            calculation_year = int(self.periodo_var.get())
+            decimo_type = "TERCERO" if self.tipo_decimo_var.get() == "13" else "CUARTO"
+
             # Confirmar cálculo
-            if not messagebox.askyesno("Confirmar", "¿Desea calcular los décimos para todos los empleados?"):
+            decimo_name = "Décimo Tercero (Bono Navideño)" if decimo_type == "TERCERO" else "Décimo Cuarto (Bono Escolar)"
+            if not messagebox.askyesno("Confirmar",
+                f"¿Desea calcular el {decimo_name} para el año {calculation_year}?\\n\\n"
+                f"Esto calculará para todos los empleados activos."):
                 return
 
             # Mostrar progreso
             progress_window = tk.Toplevel(self)
-            progress_window.title("Calculando Décimos")
-            progress_window.geometry("400x100")
+            progress_window.title(f"Calculando {decimo_name}")
+            progress_window.geometry("450x120")
             progress_window.transient(self)
             progress_window.grab_set()
+            progress_window.resizable(False, False)
 
-            tk.Label(progress_window, text="Calculando décimos...").pack(pady=20)
-            progress_bar = ttk.Progressbar(progress_window, mode='indeterminate')
-            progress_bar.pack(pady=10, padx=20, fill=tk.X)
+            # Centrar ventana de progreso
+            progress_window.geometry("+%d+%d" % (
+                progress_window.winfo_screenwidth() // 2 - 225,
+                progress_window.winfo_screenheight() // 2 - 60
+            ))
+
+            tk.Label(
+                progress_window,
+                text=f"Calculando {decimo_name}...",
+                font=('Arial', 12)
+            ).pack(pady=15)
+
+            progress_bar = ttk.Progressbar(progress_window, mode='indeterminate', length=300)
+            progress_bar.pack(pady=10)
             progress_bar.start()
+
+            status_label = tk.Label(
+                progress_window,
+                text="Iniciando cálculos...",
+                font=('Arial', 9),
+                fg='gray'
+            )
+            status_label.pack()
 
             # Actualizar interfaz
             progress_window.update()
 
-            # Aquí iría la lógica de cálculo masivo
-            # Simular procesamiento
-            self.after(2000, lambda: self.finish_calculation(progress_window))
+            # Realizar cálculo real usando DecimosCalculator
+            def perform_calculation():
+                try:
+                    status_label.config(text="Obteniendo empleados activos...")
+                    progress_window.update()
+
+                    # Calcular décimos usando el calculador
+                    results = decimos_calculator.calculate_decimos_batch(
+                        decimo_type,
+                        calculation_year
+                    )
+
+                    if not results:
+                        progress_window.destroy()
+                        messagebox.showwarning("Sin datos", "No se encontraron empleados para calcular.")
+                        return
+
+                    status_label.config(text=f"Calculando {len(results)} empleados...")
+                    progress_window.update()
+
+                    # Guardar resultados
+                    # current_user = getattr(self, 'current_user', None)
+                    # username = current_user.username if current_user else 'SYSTEM'
+                    decimos_calculator.save_decimos_results(results, 'SYSTEM')
+
+                    status_label.config(text="Guardando resultados...")
+                    progress_window.update()
+
+                    # Finalizar
+                    self.after(1000, lambda: self.finish_calculation(
+                        progress_window, results, decimo_name
+                    ))
+
+                except Exception as e:
+                    progress_window.destroy()
+                    messagebox.showerror("Error", f"Error en cálculo: {str(e)}")
+
+            # Ejecutar cálculo después de un momento
+            self.after(500, perform_calculation)
 
         except Exception as e:
-            messagebox.showerror("Error", f"Error en cálculo masivo: {str(e)}")
+            messagebox.showerror("Error", f"Error iniciando cálculo: {str(e)}")
 
-    def finish_calculation(self, progress_window):
-        """Finalizar cálculo masivo"""
-        progress_window.destroy()
-        messagebox.showinfo("Éxito", "Cálculo de décimos completado exitosamente")
+    def finish_calculation(self, progress_window, results, decimo_name):
+        """Finalizar cálculo de décimos"""
+        try:
+            progress_window.destroy()
+
+            # Mostrar resumen de resultados
+            total_amount = sum(r['monto_decimo'] for r in results)
+
+            messagebox.showinfo("Cálculo Completado",
+                f"{decimo_name} calculado exitosamente\\n\\n"
+                f"Empleados procesados: {len(results)}\\n"
+                f"Monto total: ${total_amount:,.2f}\\n\\n"
+                f"Los resultados han sido guardados en la base de datos.")
+
+            # Recargar datos si está en la pestaña de historial
+            if hasattr(self, 'history_tree'):
+                self.load_history_data()
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Error finalizando cálculo: {str(e)}")
 
     def generate_role(self):
         """Generar rol de pagos de décimos"""

@@ -17,6 +17,7 @@ from config import Config
 from database.connection import get_session
 from database.models import Empleado, RolPago, IngresoDescuento
 from gui.components.carga_masiva import show_carga_masiva_nomina
+from services.payroll_calculator import payroll_calculator
 
 logger = logging.getLogger(__name__)
 
@@ -539,28 +540,42 @@ class NominaCompleteModule(tk.Frame):
             logger.error(f"Error filtrando empleados: {e}")
 
     def calculate_payroll(self):
-        """Calcular nómina del período"""
+        """Calcular nómina del período usando PayrollCalculator"""
         if messagebox.askyesno("Confirmar", f"¿Calcular nómina para el período {self.current_period}?"):
             try:
-                # Aquí iría la lógica de cálculo real
-                # Por ahora simulamos el proceso
                 self.main_app.root.config(cursor="wait")
-
-                # Simular procesamiento
-                employees_count = self.session.query(Empleado).filter(Empleado.activo == True).count()
 
                 # Actualizar status
                 self.status_label.config(text="● CALCULANDO...", fg=Config.COLORS['warning'])
                 self.main_app.root.update()
 
-                # Simular delay
-                self.main_app.root.after(2000, self.finish_calculation)
+                # Extraer año y mes del período
+                year, month = map(int, self.current_period.split('-'))
 
-                messagebox.showinfo("Proceso Iniciado", f"Calculando nómina para {employees_count} empleados...")
+                # Calcular nómina usando el calculador
+                payroll_results = payroll_calculator.calculate_payroll_period(year, month)
+
+                if not payroll_results:
+                    messagebox.showwarning("Sin datos", "No se encontraron empleados activos para calcular.")
+                    return
+
+                # Guardar resultados
+                current_user = getattr(self.main_app, 'current_user', None)
+                username = current_user.username if current_user else 'SYSTEM'
+                payroll_calculator.save_payroll_results(payroll_results, username)
+
+                # Finalizar proceso
+                self.finish_calculation()
+
+                messagebox.showinfo("Éxito",
+                    f"Nómina calculada correctamente para {len(payroll_results)} empleados.\n\n"
+                    f"Período: {self.current_period}\n"
+                    f"Total procesado: ${sum(r['total_ingresos'] for r in payroll_results):,.2f}")
 
             except Exception as e:
                 logger.error(f"Error calculando nómina: {e}")
                 messagebox.showerror("Error", f"Error en cálculo: {str(e)}")
+                self.status_label.config(text="● ERROR", fg=Config.COLORS['danger'])
             finally:
                 self.main_app.root.config(cursor="")
 
@@ -568,7 +583,26 @@ class NominaCompleteModule(tk.Frame):
         """Finalizar cálculo de nómina"""
         self.status_label.config(text="● CALCULADO", fg=Config.COLORS['info'])
         self.load_payroll_data()
-        messagebox.showinfo("Éxito", "Nómina calculada correctamente")
+        # Actualizar resumen
+        self.update_summary_widgets()
+
+    def update_summary_widgets(self):
+        """Actualizar widgets de resumen con datos reales"""
+        try:
+            year, month = map(int, self.current_period.split('-'))
+            summary = payroll_calculator.get_payroll_summary(year, month)
+
+            # Actualizar labels de resumen (si existen)
+            if hasattr(self, 'summary_labels'):
+                self.summary_labels['empleados'].config(text=f"{summary.get('total_empleados', 0)}")
+                self.summary_labels['ingresos'].config(text=f"${summary.get('total_ingresos', 0):,.2f}")
+                self.summary_labels['descuentos'].config(text=f"${summary.get('total_descuentos', 0):,.2f}")
+                self.summary_labels['liquido'].config(text=f"${summary.get('liquido_total', 0):,.2f}")
+                self.summary_labels['iess'].config(text=f"${summary.get('aporte_iess_personal', 0):,.2f}")
+                self.summary_labels['patronal'].config(text=f"${summary.get('aporte_iess_patronal', 0):,.2f}")
+
+        except Exception as e:
+            logger.error(f"Error actualizando resumen: {e}")
 
     def process_payroll(self):
         """Procesar roles de pago"""
@@ -719,15 +753,34 @@ class NominaCompleteModule(tk.Frame):
             }
 
     def get_iess_stats(self):
-        """Obtener estadísticas IESS"""
-        stats = self.get_payroll_stats()
+        """Obtener estadísticas IESS usando datos reales"""
+        try:
+            year, month = map(int, self.current_period.split('-'))
+            summary = payroll_calculator.get_payroll_summary(year, month)
 
-        return {
-            'aporte_personal': stats['total_iess_personal'],
-            'aporte_patronal': stats['total_iess_patronal'],
-            'fondos_reserva': stats['total_salary'] * Config.FONDOS_RESERVA,
-            'total_iess': stats['total_iess_personal'] + stats['total_iess_patronal']
-        }
+            return {
+                'aporte_personal': summary.get('aporte_iess_personal', 0),
+                'aporte_patronal': summary.get('aporte_iess_patronal', 0),
+                'fondos_reserva': summary.get('provisiones_total', 0),  # Incluye fondos de reserva
+                'total_iess': summary.get('aporte_iess_personal', 0) + summary.get('aporte_iess_patronal', 0),
+                'total_empleados': summary.get('total_empleados', 0),
+                'total_ingresos': summary.get('total_ingresos', 0),
+                'liquido_total': summary.get('liquido_total', 0),
+                'costo_empresa': summary.get('costo_empresa_total', 0)
+            }
+
+        except Exception as e:
+            logger.error(f"Error obteniendo estadísticas IESS: {e}")
+            return {
+                'aporte_personal': 0,
+                'aporte_patronal': 0,
+                'fondos_reserva': 0,
+                'total_iess': 0,
+                'total_empleados': 0,
+                'total_ingresos': 0,
+                'liquido_total': 0,
+                'costo_empresa': 0
+            }
 
     def populate_department_summary(self, tree):
         """Poblar resumen por departamento"""
