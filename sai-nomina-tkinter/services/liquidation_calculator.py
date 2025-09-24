@@ -80,18 +80,18 @@ class LiquidationCalculator:
         """
         try:
             # Validaciones básicas
-            if not empleado.fecha_ingreso:
-                raise ValueError(f"Empleado {empleado.codigo} no tiene fecha de ingreso")
+            if not empleado.fecha_ing:
+                raise ValueError(f"Empleado {empleado.empleado} no tiene fecha de ingreso")
 
-            if termination_date < empleado.fecha_ingreso:
+            if termination_date < empleado.fecha_ing:
                 raise ValueError("Fecha de terminación no puede ser anterior a fecha de ingreso")
 
             # Cálculo de tiempo trabajado
-            years_worked = self.calculate_years_worked(empleado.fecha_ingreso, termination_date)
-            days_worked = (termination_date - empleado.fecha_ingreso).days
+            years_worked = self.calculate_years_worked(empleado.fecha_ing, termination_date)
+            days_worked = (termination_date - empleado.fecha_ing).days
 
             # Sueldo base
-            base_salary = empleado.sueldo_basico or self.parameters["SBU"]
+            base_salary = empleado.sueldo or self.parameters["SBU"]
 
             # === CÁLCULOS DE LIQUIDACIÓN ===
 
@@ -148,9 +148,9 @@ class LiquidationCalculator:
 
             return {
                 # Información del empleado
-                "empleado_codigo": empleado.codigo,
+                "empleado_codigo": empleado.empleado,
                 "empleado_nombre": f"{empleado.nombres} {empleado.apellidos}",
-                "fecha_ingreso": empleado.fecha_ingreso,
+                "fecha_ingreso": empleado.fecha_ing,
                 "fecha_terminacion": termination_date,
                 "tipo_terminacion": termination_type,
                 "motivo_terminacion": termination_reason,
@@ -187,7 +187,7 @@ class LiquidationCalculator:
             }
 
         except Exception as e:
-            logger.error(f"Error calculando liquidación para {empleado.codigo}: {e}")
+            logger.error(f"Error calculando liquidación para {empleado.empleado}: {e}")
             raise
 
     def calculate_years_worked(self, hire_date, termination_date):
@@ -275,7 +275,7 @@ class LiquidationCalculator:
                 period_end = date(current_year + 1, 11, 30)
 
             # Fecha efectiva de inicio (no antes del ingreso)
-            effective_start = max(period_start, empleado.fecha_ingreso)
+            effective_start = max(period_start, empleado.fecha_ing)
 
             # Fecha efectiva de fin (fecha de terminación)
             effective_end = min(termination_date, period_end)
@@ -319,7 +319,7 @@ class LiquidationCalculator:
                 period_end = date(current_year, 7, 31)
 
             # Fecha efectiva de inicio
-            effective_start = max(period_start, empleado.fecha_ingreso)
+            effective_start = max(period_start, empleado.fecha_ing)
             effective_end = min(termination_date, period_end)
 
             if effective_end <= effective_start:
@@ -345,7 +345,7 @@ class LiquidationCalculator:
         """Calcular fondos de reserva pendientes"""
         try:
             # Fondos de reserva aplican después de 1 año
-            years_worked = self.calculate_years_worked(empleado.fecha_ingreso, termination_date)
+            years_worked = self.calculate_years_worked(empleado.fecha_ing, termination_date)
 
             if years_worked < 1:
                 return Decimal("0")
@@ -359,7 +359,7 @@ class LiquidationCalculator:
 
             # Meses del año actual hasta la fecha de terminación
             year_start = date(termination_date.year, 1, 1)
-            effective_start = max(year_start, empleado.fecha_ingreso)
+            effective_start = max(year_start, empleado.fecha_ing)
 
             if termination_date <= effective_start:
                 return Decimal("0")

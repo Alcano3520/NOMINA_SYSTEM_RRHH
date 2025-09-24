@@ -79,17 +79,17 @@ class DecimosCalculator:
 
             # Verificar que el empleado esté activo
             if not empleado.activo:
-                raise ValueError(f"Empleado {empleado.codigo} no está activo")
+                raise ValueError(f"Empleado {empleado.empleado} no está activo")
 
             # Calcular fecha de inicio efectiva (no antes de la fecha de ingreso)
             effective_start = period_start
-            if empleado.fecha_ingreso and empleado.fecha_ingreso > period_start:
-                effective_start = empleado.fecha_ingreso
+            if empleado.fecha_ing and empleado.fecha_ing > period_start:
+                effective_start = empleado.fecha_ing
 
             # Calcular fecha de fin efectiva
             effective_end = period_end
-            if empleado.fecha_salida and empleado.fecha_salida < period_end:
-                effective_end = empleado.fecha_salida
+            if empleado.fecha_sal and empleado.fecha_sal < period_end:
+                effective_end = empleado.fecha_sal
 
             # Días trabajados en el período
             days_worked = (effective_end - effective_start).days + 1
@@ -111,7 +111,7 @@ class DecimosCalculator:
             decimo_tercero = self.round_currency(decimo_tercero)
 
             return {
-                "empleado_codigo": empleado.codigo,
+                "empleado_codigo": empleado.empleado,
                 "empleado_nombre": f"{empleado.nombres} {empleado.apellidos}",
                 "tipo": "DECIMO_TERCERO",
                 "año_calculo": calculation_year,
@@ -127,7 +127,7 @@ class DecimosCalculator:
             }
 
         except Exception as e:
-            logger.error(f"Error calculando décimo tercero para {empleado.codigo}: {e}")
+            logger.error(f"Error calculando décimo tercero para {empleado.empleado}: {e}")
             raise
 
     def calculate_decimo_cuarto(self, empleado, calculation_year):
@@ -148,17 +148,17 @@ class DecimosCalculator:
 
             # Verificar que el empleado esté activo
             if not empleado.activo:
-                raise ValueError(f"Empleado {empleado.codigo} no está activo")
+                raise ValueError(f"Empleado {empleado.empleado} no está activo")
 
             # Calcular fecha de inicio efectiva
             effective_start = period_start
-            if empleado.fecha_ingreso and empleado.fecha_ingreso > period_start:
-                effective_start = empleado.fecha_ingreso
+            if empleado.fecha_ing and empleado.fecha_ing > period_start:
+                effective_start = empleado.fecha_ing
 
             # Calcular fecha de fin efectiva
             effective_end = period_end
-            if empleado.fecha_salida and empleado.fecha_salida < period_end:
-                effective_end = empleado.fecha_salida
+            if empleado.fecha_sal and empleado.fecha_sal < period_end:
+                effective_end = empleado.fecha_sal
 
             # Días trabajados en el período
             days_worked = (effective_end - effective_start).days + 1
@@ -179,7 +179,7 @@ class DecimosCalculator:
             decimo_cuarto = self.round_currency(decimo_cuarto)
 
             return {
-                "empleado_codigo": empleado.codigo,
+                "empleado_codigo": empleado.empleado,
                 "empleado_nombre": f"{empleado.nombres} {empleado.apellidos}",
                 "tipo": "DECIMO_CUARTO",
                 "año_calculo": calculation_year,
@@ -195,7 +195,7 @@ class DecimosCalculator:
             }
 
         except Exception as e:
-            logger.error(f"Error calculando décimo cuarto para {empleado.codigo}: {e}")
+            logger.error(f"Error calculando décimo cuarto para {empleado.empleado}: {e}")
             raise
 
     def get_employee_income_period(self, empleado, start_date, end_date):
@@ -222,7 +222,7 @@ class DecimosCalculator:
             # Sumar ingresos de todos los períodos
             for period in periods:
                 roles = self.session.query(RolPago).filter(
-                    RolPago.empleado_codigo == empleado.codigo,
+                    RolPago.empleado == empleado.empleado,
                     RolPago.periodo == period
                 ).all()
 
@@ -260,7 +260,7 @@ class DecimosCalculator:
 
             # Filtrar por códigos específicos si se proporcionan
             if employee_codes:
-                query = query.filter(Empleado.codigo.in_(employee_codes))
+                query = query.filter(Empleado.empleado.in_(employee_codes))
 
             empleados = query.all()
             results = []
@@ -277,7 +277,7 @@ class DecimosCalculator:
                     results.append(result)
 
                 except Exception as e:
-                    logger.error(f"Error calculando {decimo_type} para empleado {empleado.codigo}: {e}")
+                    logger.error(f"Error calculando {decimo_type} para empleado {empleado.empleado}: {e}")
                     continue
 
             logger.info(f"Décimo {decimo_type} calculado para {len(results)} empleados del año {calculation_year}")

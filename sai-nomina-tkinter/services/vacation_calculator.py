@@ -82,13 +82,13 @@ class VacationCalculator:
 
             # Verificar que el empleado esté activo
             if not empleado.activo:
-                raise ValueError(f"Empleado {empleado.codigo} no está activo")
+                raise ValueError(f"Empleado {empleado.empleado} no está activo")
 
             # Fecha de ingreso
-            if not empleado.fecha_ingreso:
-                raise ValueError(f"Empleado {empleado.codigo} no tiene fecha de ingreso")
+            if not empleado.fecha_ing:
+                raise ValueError(f"Empleado {empleado.empleado} no tiene fecha de ingreso")
 
-            hire_date = empleado.fecha_ingreso
+            hire_date = empleado.fecha_ing
 
             # Calcular tiempo trabajado
             if as_of_date < hire_date:
@@ -118,7 +118,7 @@ class VacationCalculator:
             available_days = total_accrued_days - used_days - pending_days
 
             return {
-                "empleado_codigo": empleado.codigo,
+                "empleado_codigo": empleado.empleado,
                 "empleado_nombre": f"{empleado.nombres} {empleado.apellidos}",
                 "fecha_ingreso": hire_date,
                 "fecha_calculo": as_of_date,
@@ -136,7 +136,7 @@ class VacationCalculator:
             }
 
         except Exception as e:
-            logger.error(f"Error calculando balance de vacaciones para {empleado.codigo}: {e}")
+            logger.error(f"Error calculando balance de vacaciones para {empleado.empleado}: {e}")
             raise
 
     def calculate_years_worked(self, hire_date, as_of_date):
@@ -183,7 +183,7 @@ class VacationCalculator:
         """Obtener días de vacaciones utilizados en un período"""
         try:
             used_vacations = self.session.query(Vacacion).filter(
-                Vacacion.empleado_codigo == empleado.codigo,
+                Vacacion.empleado_codigo == empleado.empleado,
                 Vacacion.estado == "APROBADO",
                 Vacacion.fecha_inicio >= from_date,
                 Vacacion.fecha_inicio <= to_date
@@ -200,7 +200,7 @@ class VacationCalculator:
         """Obtener días de vacaciones pendientes/solicitados"""
         try:
             pending_vacations = self.session.query(Vacacion).filter(
-                Vacacion.empleado_codigo == empleado.codigo,
+                Vacacion.empleado_codigo == empleado.empleado,
                 Vacacion.estado.in_(["PENDIENTE", "APROBADO"]),
                 Vacacion.fecha_inicio >= as_of_date
             ).all()
@@ -241,7 +241,7 @@ class VacationCalculator:
                 payment_date = date.today()
 
             # Sueldo base del empleado
-            base_salary = empleado.sueldo_basico or self.parameters["SBU"]
+            base_salary = empleado.sueldo or self.parameters["SBU"]
 
             # En Ecuador, las vacaciones se pagan con 1/24 del sueldo anual
             # Es decir, por cada día de vacaciones se paga 1/24 del sueldo mensual
@@ -251,7 +251,7 @@ class VacationCalculator:
             total_payment = vacation_daily_rate * Decimal(str(vacation_days))
 
             return {
-                "empleado_codigo": empleado.codigo,
+                "empleado_codigo": empleado.empleado,
                 "empleado_nombre": f"{empleado.nombres} {empleado.apellidos}",
                 "dias_vacaciones": vacation_days,
                 "sueldo_base": self.round_currency(base_salary),
@@ -340,7 +340,7 @@ class VacationCalculator:
         """Verificar conflictos con vacaciones existentes"""
         try:
             existing_vacations = self.session.query(Vacacion).filter(
-                Vacacion.empleado_codigo == empleado.codigo,
+                Vacacion.empleado_codigo == empleado.empleado,
                 Vacacion.estado.in_(["PENDIENTE", "APROBADO"]),
                 # Verificar solapamiento de fechas
                 Vacacion.fecha_inicio <= end_date,
@@ -399,7 +399,7 @@ class VacationCalculator:
 
                 # Vacaciones del año
                 year_vacations = self.session.query(Vacacion).filter(
-                    Vacacion.empleado_codigo == empleado.codigo,
+                    Vacacion.empleado_codigo == empleado.empleado,
                     Vacacion.fecha_inicio >= date(year, 1, 1),
                     Vacacion.fecha_inicio <= date(year, 12, 31)
                 ).all()
@@ -408,10 +408,10 @@ class VacationCalculator:
                 days_pending = sum(v.dias_solicitados for v in year_vacations if v.estado == "PENDIENTE")
 
                 report_data.append({
-                    "codigo": empleado.codigo,
+                    "codigo": empleado.empleado,
                     "nombre_completo": f"{empleado.nombres} {empleado.apellidos}",
                     "departamento": empleado.depto or "SIN ASIGNAR",
-                    "fecha_ingreso": empleado.fecha_ingreso,
+                    "fecha_ingreso": empleado.fecha_ing,
                     "años_servicio": balance["años_trabajados"],
                     "dias_acumulados": balance["total_acumulados"],
                     "dias_utilizados": balance["dias_utilizados"],

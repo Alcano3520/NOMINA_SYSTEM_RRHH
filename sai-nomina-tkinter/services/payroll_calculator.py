@@ -8,10 +8,10 @@ Cálculos de nómina según normativa ecuatoriana 2024
 import sys
 from pathlib import Path
 import logging
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from decimal import Decimal, ROUND_HALF_UP
 from calendar import monthrange
-import holidays
+# import holidays  # Not needed for basic functionality
 
 # Agregar path para imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -87,7 +87,7 @@ class PayrollCalculator:
         try:
             # Validaciones básicas
             if not empleado.activo:
-                raise ValueError(f"Empleado {empleado.codigo} no está activo")
+                raise ValueError(f"Empleado {empleado.empleado} no está activo")
 
             # Días del período
             if days_worked is None:
@@ -95,7 +95,7 @@ class PayrollCalculator:
                 days_worked = days_in_month
 
             # Sueldo básico proporcional
-            sueldo_mensual = empleado.sueldo_basico or self.parameters["SBU"]
+            sueldo_mensual = empleado.sueldo or self.parameters["SBU"]
             sueldo_diario = sueldo_mensual / 30  # Base 30 días
             sueldo_basico = sueldo_diario * days_worked
 
@@ -153,7 +153,7 @@ class PayrollCalculator:
             # Resultado completo
             return {
                 # Datos del empleado
-                "empleado_codigo": empleado.codigo,
+                "empleado_codigo": empleado.empleado,
                 "empleado_nombre": f"{empleado.nombres} {empleado.apellidos}",
                 "periodo": f"{period_year:04d}-{period_month:02d}",
                 "dias_trabajados": days_worked,
@@ -196,7 +196,7 @@ class PayrollCalculator:
             }
 
         except Exception as e:
-            logger.error(f"Error calculando nómina para {empleado.codigo}: {e}")
+            logger.error(f"Error calculando nómina para {empleado.empleado}: {e}")
             raise
 
     def get_overtime_hours(self, empleado, year, month, overtime_type):
@@ -222,14 +222,14 @@ class PayrollCalculator:
 
             # Consultar ingresos adicionales del período
             ingresos = self.session.query(IngresoDescuento).filter(
-                IngresoDescuento.empleado_codigo == empleado.codigo,
+                IngresoDescuento.empleado == empleado.empleado,
                 IngresoDescuento.tipo == "INGRESO",
-                IngresoDescuento.fecha >= period_start,
-                IngresoDescuento.fecha < period_end,
-                IngresoDescuento.activo == True
+                IngresoDescuento.fecha_desde >= period_start,
+                IngresoDescuento.fecha_desde < period_end,
+                IngresoDescuento.procesado == False
             ).all()
 
-            total = sum(Decimal(str(ingreso.monto)) for ingreso in ingresos)
+            total = sum(Decimal(str(ingreso.valor)) for ingreso in ingresos)
             return total
 
         except Exception as e:
@@ -248,14 +248,14 @@ class PayrollCalculator:
 
             # Consultar descuentos del período
             descuentos = self.session.query(IngresoDescuento).filter(
-                IngresoDescuento.empleado_codigo == empleado.codigo,
+                IngresoDescuento.empleado == empleado.empleado,
                 IngresoDescuento.tipo == "DESCUENTO",
-                IngresoDescuento.fecha >= period_start,
-                IngresoDescuento.fecha < period_end,
-                IngresoDescuento.activo == True
+                IngresoDescuento.fecha_desde >= period_start,
+                IngresoDescuento.fecha_desde < period_end,
+                IngresoDescuento.procesado == False
             ).all()
 
-            total = sum(Decimal(str(descuento.monto)) for descuento in descuentos)
+            total = sum(Decimal(str(descuento.valor)) for descuento in descuentos)
             return total
 
         except Exception as e:
@@ -311,8 +311,8 @@ class PayrollCalculator:
         """Verificar si empleado es elegible para fondos de reserva"""
         try:
             # Fondos de reserva aplican después de 1 año de trabajo
-            if empleado.fecha_ingreso:
-                years_worked = (datetime.now().date() - empleado.fecha_ingreso).days / 365.25
+            if empleado.fecha_ing:
+                years_worked = (datetime.now().date() - empleado.fecha_ing).days / 365.25
                 return years_worked >= 1
             return False
 
@@ -344,7 +344,7 @@ class PayrollCalculator:
 
             # Filtrar por códigos específicos si se proporcionan
             if employee_codes:
-                query = query.filter(Empleado.codigo.in_(employee_codes))
+                query = query.filter(Empleado.empleado.in_(employee_codes))
 
             empleados = query.all()
             results = []
@@ -355,7 +355,7 @@ class PayrollCalculator:
                     results.append(result)
 
                 except Exception as e:
-                    logger.error(f"Error calculando nómina para empleado {empleado.codigo}: {e}")
+                    logger.error(f"Error calculando nómina para empleado {empleado.empleado}: {e}")
                     continue
 
             logger.info(f"Nómina calculada para {len(results)} empleados del período {period_year}-{period_month:02d}")
@@ -377,20 +377,29 @@ class PayrollCalculator:
             for result in payroll_results:
                 # Verificar si ya existe el rol de pago
                 existing_rol = self.session.query(RolPago).filter(
-                    RolPago.empleado_codigo == result["empleado_codigo"],
+                    RolPago.empleado == result["empleado_codigo"],
                     RolPago.periodo == result["periodo"]
                 ).first()
 
                 if existing_rol:
                     # Actualizar rol existente
                     rol_pago = existing_rol
-                    rol_pago.fecha_modificacion = datetime.now()
                 else:
+                    # Calcular fechas del período
+                    year, month = map(int, result["periodo"].split("-"))
+                    fecha_desde = date(year, month, 1)
+
+                    if month == 12:
+                        fecha_hasta = date(year + 1, 1, 1) - timedelta(days=1)
+                    else:
+                        fecha_hasta = date(year, month + 1, 1) - timedelta(days=1)
+
                     # Crear nuevo rol de pago
                     rol_pago = RolPago(
-                        empleado_codigo=result["empleado_codigo"],
+                        empleado=result["empleado_codigo"],
                         periodo=result["periodo"],
-                        fecha_creacion=datetime.now()
+                        fecha_desde=fecha_desde,
+                        fecha_hasta=fecha_hasta
                     )
                     self.session.add(rol_pago)
 
