@@ -38,7 +38,7 @@ class EmpleadosCompleteModule(tk.Frame):
 
         # Container principal
         main_container = tk.Frame(self, bg='white')
-        main_container.pack(fill="both", expand=True, padx=25, pady=(0, 25))
+        main_container.pack(fill="both", expand=True, padx=15, pady=(0, 15))
 
         # Panel de busqueda
         self.create_search_panel(main_container)
@@ -56,13 +56,13 @@ class EmpleadosCompleteModule(tk.Frame):
     def create_module_header(self):
         """Crear header del modulo"""
         header_frame = tk.Frame(self, bg='white')
-        header_frame.pack(fill="x", padx=25, pady=25)
+        header_frame.pack(fill="x", padx=15, pady=15)
 
         # Titulo y descripcion
         title_label = tk.Label(
             header_frame,
             text="👥 Gestión de Empleados",
-            font=('Arial', 20, 'bold'),
+            font=('Arial', 16, 'bold'),
             bg='white',
             fg=Config.COLORS['secondary']
         )
@@ -71,7 +71,7 @@ class EmpleadosCompleteModule(tk.Frame):
         subtitle_label = tk.Label(
             header_frame,
             text="Gestión completa del personal - Datos generales, ingresos, descuentos y más",
-            font=('Arial', 12),
+            font=('Arial', 10),
             bg='white',
             fg=Config.COLORS['text']
         )
@@ -86,11 +86,11 @@ class EmpleadosCompleteModule(tk.Frame):
         search_frame = tk.LabelFrame(
             parent,
             text="🔍 Búsqueda y Filtros",
-            font=('Arial', 12, 'bold'),
+            font=('Arial', 10, 'bold'),
             bg='white',
             fg=Config.COLORS['secondary'],
-            padx=15,
-            pady=10
+            padx=10,
+            pady=8
         )
         search_frame.pack(fill="x", pady=(0, 10))
 
@@ -227,7 +227,7 @@ class EmpleadosCompleteModule(tk.Frame):
 
         # Treeview
         columns = ("Código", "Cédula", "Empleado", "Estado")
-        self.employee_tree = ttk.Treeview(list_frame, columns=columns, show="headings", height=20)
+        self.employee_tree = ttk.Treeview(list_frame, columns=columns, show="headings", height=15)
 
         # Configurar columnas
         self.employee_tree.heading("Código", text="Código")
@@ -235,10 +235,10 @@ class EmpleadosCompleteModule(tk.Frame):
         self.employee_tree.heading("Empleado", text="Empleado")
         self.employee_tree.heading("Estado", text="Estado")
 
-        self.employee_tree.column("Código", width=80, anchor="center")
-        self.employee_tree.column("Cédula", width=100, anchor="center")
-        self.employee_tree.column("Empleado", width=180, anchor="w")
-        self.employee_tree.column("Estado", width=80, anchor="center")
+        self.employee_tree.column("Código", width=70, anchor="center")
+        self.employee_tree.column("Cédula", width=90, anchor="center")
+        self.employee_tree.column("Empleado", width=160, anchor="w")
+        self.employee_tree.column("Estado", width=70, anchor="center")
 
         # Scrollbar
         scrollbar = ttk.Scrollbar(list_frame, orient="vertical", command=self.employee_tree.yview)
@@ -265,7 +265,7 @@ class EmpleadosCompleteModule(tk.Frame):
         self.details_title = tk.Label(
             details_header,
             text="Detalles del Empleado",
-            font=('Arial', 14, 'bold'),
+            font=('Arial', 12, 'bold'),
             bg='white',
             fg=Config.COLORS['secondary']
         )
@@ -355,13 +355,13 @@ class EmpleadosCompleteModule(tk.Frame):
         basic_frame = tk.LabelFrame(
             scrollable_frame,
             text="Información Básica",
-            font=('Arial', 12, 'bold'),
+            font=('Arial', 10, 'bold'),
             bg='white',
             fg=Config.COLORS['secondary'],
-            padx=15,
-            pady=10
+            padx=10,
+            pady=8
         )
-        basic_frame.pack(fill="x", padx=10, pady=5)
+        basic_frame.pack(fill="x", padx=8, pady=4)
 
         # Grid para campos
         row = 0
@@ -398,13 +398,13 @@ class EmpleadosCompleteModule(tk.Frame):
         dates_frame = tk.LabelFrame(
             scrollable_frame,
             text="Fechas Importantes",
-            font=('Arial', 12, 'bold'),
+            font=('Arial', 10, 'bold'),
             bg='white',
             fg=Config.COLORS['secondary'],
-            padx=15,
-            pady=10
+            padx=10,
+            pady=8
         )
-        dates_frame.pack(fill="x", padx=10, pady=5)
+        dates_frame.pack(fill="x", padx=8, pady=4)
 
         row = 0
 
@@ -431,7 +431,7 @@ class EmpleadosCompleteModule(tk.Frame):
 
         # Contenido personal
         content_frame = tk.Frame(tab_frame, bg='white')
-        content_frame.pack(fill="both", expand=True, padx=15, pady=15)
+        content_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
         # Datos personales
         personal_frame = tk.LabelFrame(
